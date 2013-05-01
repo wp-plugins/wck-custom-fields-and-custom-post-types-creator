@@ -13,15 +13,15 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 
 == Description ==
 
-=WordPress Creation Kit= consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT’s.
+**WordPress Creation Kit** consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT's.
 
-=WCK Custom Fields Creator= offers an UI for setting up custom meta boxes for your posts, pages or custom post types. Uses standard custom fields to store data.
+**WCK Custom Fields Creator** offers an UI for setting up custom meta boxes for your posts, pages or custom post types. Uses standard custom fields to store data.
 
-=WCK Custom Post Type Creator= facilitates creating custom post types by providing an UI for most of the arguments of register_post_type() function.
+**WCK Custom Post Type Creator** facilitates creating custom post types by providing an UI for most of the arguments of register_post_type() function.
 
-=WCK Taxonomy Creator= allows you to easily create and edit custom taxonomies for WordPress without any programming knowledge. It provides an UI for most of the arguments of register_taxonomy() function.
+**WCK Taxonomy Creator** allows you to easily create and edit custom taxonomies for WordPress without any programming knowledge. It provides an UI for most of the arguments of register_taxonomy() function.
 
-= Custom Fields=
+= Custom Fields =
 * Custom fields types: wysiwyg editor, upload, text, textarea, select, checkbox, radio
 * Easy to create custom fields for any post type.
 * Support for **Repeater Fields** and **Repeater Groups**.
