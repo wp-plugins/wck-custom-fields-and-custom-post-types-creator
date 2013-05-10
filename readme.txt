@@ -39,7 +39,8 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 * Create and edit Custom Taxonomies from the Admin UI
 * Attach the taxonomies to built in or custom post types
 
-= [WCK Pro offers] (http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/) =
+= WCK PRO =
+  The [PRO version](http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/) offers:
 * Front-end Posting - form builder for content creation and editing
 * Premium Email Support for your project
   
