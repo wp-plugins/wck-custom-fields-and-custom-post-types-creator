@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: WCK - Custom Fields and Custom Post Types Creator
-Description: WordPress Creation Kit consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT’s.
+Description: WordPress Creation Kit consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT's.
 Author: Reflection Media, Madalin Ungureanu
-Version: 1.0.0
+Version: 1.0.1
 Author URI: http://www.reflectionmedia.ro
 
 License: GPL2
@@ -24,6 +24,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+define( 'WCK_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . dirname( plugin_basename( __FILE__ ) ) );
+
 /* ready for localization */
 load_plugin_textdomain( 'wck', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
@@ -38,7 +40,7 @@ $args = array(
 			'capability' => 'edit_theme_options',
 			'menu_slug' => 'wck-page',									
 			'page_type' => 'menu_page',
-			'position' => 30,
+			'position' => '30,27',
 			'priority' => 7,
 			'icon_url' => plugins_url('/images/wck-icon.png', __FILE__)
 		);
@@ -50,21 +52,43 @@ function wck_remove_wck_submenu_page(){
 	remove_submenu_page( 'wck-page', 'wck-page' );
 }
 
-
+/* include Start and Settings Page */
+require_once('wck-sas.php');
 /* include Custom Post Type Creator */
 require_once('wck-cptc.php');
 /* include Custom Taxonomy Creator */
 require_once('wck-ctc.php');
 /* include Custom Fields Creator */
 require_once('wck-cfc.php');
+/* include FrontEnd Posting */
+if( file_exists( dirname(__FILE__).'/wck-fep.php' ) )
+	require_once('wck-fep.php');
+/* include Option Page Creator */
+if( file_exists( dirname(__FILE__).'/wck-opc.php' ) )
+	require_once('wck-opc.php');
 
 /* deactivation hook */
 register_deactivation_hook( __FILE__, 'wck_deactivate_function' );
-function wck_deactivate_function() {
+function wck_deactivate_function() {	
 	
 	/* remove capabilities from subscriber that were added by FEP */
 	$role = get_role( 'subscriber' ); 	
 	$role->remove_cap( 'upload_files' );	
 	$role->remove_cap( 'edit_posts' );
+}
+
+/* check for updates */
+$wck_premium_update = WCK_PLUGIN_DIR.'/update/';
+if (file_exists ($wck_premium_update . 'update-checker.php')){
+	require_once ($wck_premium_update . 'update-checker.php');
+	(array)$wck_serial = get_option('wck_serial');
+	$wck_serial = $wck_serial[0]['serial-number'];
+	if(empty($wck_serial) || $wck_serial == '') $wck_serial = '';
+	
+	if (file_exists ( WCK_PLUGIN_DIR . '/wordpress-creation-kit-api/wck-fep/wck-fep.php' )){
+		$wck_update = new wck_PluginUpdateChecker('http://updatemetadata.cozmoslabs.com/?localSerialNumber='.$wck_serial.'&uniqueproduct=WCKP', __FILE__, 'wck-pro');
+	} else {
+		$wck_update = new wck_PluginUpdateChecker('http://updatemetadata.cozmoslabs.com/?localSerialNumber='.$wck_serial.'&uniqueproduct=WCKH', __FILE__, 'wck-hobby');
+	}
 }
 ?>

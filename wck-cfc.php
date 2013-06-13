@@ -72,7 +72,7 @@ function wck_cfc_create_box(){
 	$post_types = get_post_types($args,$output);
 	$post_type_names = array(); 
 	foreach ($post_types  as $post_type ) {
-		if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' ) 
+		if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' ) 
 			$post_type_names[] = $post_type->name;
 	}
 	
@@ -105,11 +105,14 @@ function wck_cfc_create_box(){
 	/* create the box */
 	new Wordpress_Creation_Kit( $args );
 	
+	/* set up field types */
+	$field_types = array( 'text', 'textarea', 'select', 'checkbox', 'radio', 'upload', 'wysiwyg editor', 'datepicker', 'country select', 'user select' );
+	$field_types = apply_filters( 'wck_field_types', $field_types );
 	
 	/* set up the fields array */
 	$cfc_box_fields_fields = array( 
 		array( 'type' => 'text', 'title' => __( 'Field Title', 'wck' ), 'description' => __( 'Title of the field. A slug will automatically be generated.', 'wck' ), 'required' => true ),
-		array( 'type' => 'select', 'title' => __( 'Field Type', 'wck' ), 'options' => array( 'text', 'textarea', 'select', 'checkbox', 'radio', 'upload', 'wysiwyg editor' ), 'default-option' => true, 'description' => __( 'The field type', 'wck' ), 'required' => true ),
+		array( 'type' => 'select', 'title' => __( 'Field Type', 'wck' ), 'options' => $field_types, 'default-option' => true, 'description' => __( 'The field type', 'wck' ), 'required' => true ),
 		array( 'type' => 'textarea', 'title' => __( 'Description', 'wck' ), 'description' => 'The description of the field.' ),				
 		array( 'type' => 'select', 'title' => __( 'Required', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether the field is required or not', 'wck' ) ),
 		array( 'type' => 'text', 'title' => __( 'Default Value', 'wck' ), 'description' => __( 'Default value of the field. For Checkboxes if there are multiple values separete them with a ","', 'wck' ) ),
@@ -299,11 +302,8 @@ function wck_cfc_create_boxes_args(){
 					
 				if( !empty( $wck_cfc_arg['page-template'] ) )
 					$box_args['page_template'] = $wck_cfc_arg['page-template'];	
-
-				/* create the box */
-				//new Wordpress_Creation_Kit( $box_args );
-				
-				$all_box_args[] = $box_args;
+								
+				$all_box_args[] = apply_filters( "wck_cfc_box_args_".$wck_cfc_arg['meta-name'], $box_args );
 			}
 		}
 	}
@@ -507,7 +507,7 @@ function wck_cfc_add_side_boxes(){
 }
 function wck_cfc_side_box_one(){
 	?>
-		<a href="http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>" width="260" height="385" alt="WCK-PRO"/></a>
+		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>" width="260" height="385" alt="WCK-PRO"/></a>
 	<?php
 }
 
@@ -555,38 +555,17 @@ function wck_cfc_help () {
  *
  * Based on wordpress get_page_templates()
  *
- * @return array Key is the template name, value is the filename of the template
+ * @return array Key is the template name, value is the %Template Name%filename string format of the template
  */
 function wck_get_page_templates() {	
-	$theme = wp_get_theme();
-	$templates = $theme['Template Files'];
+
 	$page_templates = array();
-
-	if ( is_array( $templates ) ) {
-		$base = array( trailingslashit(get_template_directory()), trailingslashit(get_stylesheet_directory()) );
-
-		foreach ( $templates as $template ) {
-			$basename = str_replace($base, '', $template);
-
-			// don't allow template files in subdirectories
-			if ( false !== strpos($basename, '/') )
-				continue;
-
-			if ( 'functions.php' == $basename )
-				continue;
-
-			$template_data = implode( '', file( $template ));
-
-			$name = '';
-			if ( preg_match( '|Template Name:(.*)$|mi', $template_data, $name ) )
-				$name = _cleanup_header_comment($name[1]);
-
-			if ( !empty( $name ) ) {
-				$page_templates[trim( $name )] = $basename;
-			}
+	$theme_templates = array_flip(wp_get_theme()->get_page_templates());
+	if( !empty( $theme_templates ) ){
+		foreach( $theme_templates  as $key => $value){
+			$page_templates[$key] = "%$key%$value";
 		}
 	}
-
 	return $page_templates;
 }
 
@@ -598,5 +577,15 @@ function wck_cfc_filter_post_update_message($messages){
 		1 => __('Metabox updated.', 'wck')
 	);
 	return $messages;
+}
+
+/* Filter Field Types for free version */
+add_filter( 'wck_field_types', 'wck_cfc_filter_field_types' );
+function wck_cfc_filter_field_types( $field_types ){
+	$wck_premium_update = WCK_PLUGIN_DIR.'/update/';
+	if ( !file_exists ($wck_premium_update . 'update-checker.php'))
+		$field_types = array( 'text', 'textarea', 'select', 'checkbox', 'radio', 'upload', 'wysiwyg editor' );
+	
+	return $field_types;
 }
 ?>

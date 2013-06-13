@@ -6,7 +6,7 @@ Tags: custom fields, custom field, wordpress custom fields, advanced custom fiel
 
 Requires at least: 3.1
 Tested up to: 3.5.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 
 A must have tool for creating custom fields, custom post types and taxonomies, fast and without any programming knowledge.
 
@@ -40,9 +40,11 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 * Attach the taxonomies to built in or custom post types
 
 = WCK PRO =
-  The [PRO version](http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/) offers:
+  The [PRO version](http://www.cozmoslabs.com/wordpress-creation-kit/) offers:
   
 * Front-end Posting - form builder for content creation and editing
+* Options Page Creator - create option pages for your theme or your plugin
+* More field types: Datepicker, Country Select, User Select
 * Premium Email Support for your project
   
  [See complete list of features](http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/)
@@ -134,3 +136,10 @@ Creating a taxonomy generally automatically creates a special query variable usi
 8. Post Type Creator UI and listing
 9. Taxonomy Creator UI
 10. Taxonomy listing
+
+== Changelog ==
+1.0.1
+Fixed Menu Position argument for Custom Post Type Creator.
+Added filter for default_value.
+Fixed Template Select dropdown for Custom Fields Creator.
+Fixed a bug in Custom Fields Creator that prevented Options field in the process of creating custom fields from appearing.

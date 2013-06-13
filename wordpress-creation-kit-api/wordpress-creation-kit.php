@@ -13,6 +13,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+if( file_exists( dirname(__FILE__). '/wck-fep/wck-fep.php' ) )
+	require_once( 'wck-fep/wck-fep.php' );
+
 /* 
 
 Usage Example 1:
@@ -55,7 +58,7 @@ class Wordpress_Creation_Kit{
 							'page_template' => '',
 							'post_id' => '',
 							'single' => false,
-							'wpml_compatibility' => false,
+							'unserialize_fields' => false,
 							'sortable' => true,
 							'context' => 'post_meta'
 						);
@@ -178,8 +181,9 @@ class Wordpress_Creation_Kit{
 			if( empty( $meta_val ) )
 				self::create_add_form($metabox['args']['meta_array'], $metabox['args']['meta_name'], $post);
 		}
-		else
+		else 
 			self::create_add_form($metabox['args']['meta_array'], $metabox['args']['meta_name'], $post);
+		
 		//output the entries
 		echo self::wck_output_meta_content($metabox['args']['meta_name'], $post->ID, $metabox['args']['meta_array']);
 	}
@@ -209,7 +213,7 @@ class Wordpress_Creation_Kit{
 		}
 		else{
 			if( !empty( $details['default'] ) )
-				$value = $details['default'];
+				$value = apply_filters( "wck_default_value_{$meta}_".sanitize_title_with_dashes( remove_accents ( $details['title'] ) ) , $details['default'] );
 		}
 		
 		
@@ -218,172 +222,15 @@ class Wordpress_Creation_Kit{
 			$element .= '<span class="required">*</span>';
 		$element .= '</label>';
 		
-		$element .= '<div class="mb-right-column">';
+		$element .= '<div class="mb-right-column">';	
 		
-		if($details['type'] == 'text'){
-			$element .= '<input type="text" name="'. esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'" id="'. $frontend_prefix . esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'" value="'. esc_attr( $value ) .'" class="mb-text-input mb-field"/>';
-		} 
-		
-		if($details['type'] == 'textarea'){
-			$element .= '<textarea name="'. esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'" id="'. $frontend_prefix . esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'" style="vertical-align:top;" class="mb-textarea mb-field">'. esc_html( $value ) .'</textarea>';
-		}
-		
-		if($details['type'] == 'select'){
-			$element .= '<select name="'. esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'"  id="'. $frontend_prefix . esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'" class="mb-select mb-field" >';
-			
-			if( !empty( $details['default-option'] ) && $details['default-option'] )
-				$element .= '<option value="">'. __('...Chose', 'wck') .'</option>';
-			
-			if( !empty( $details['options'] ) ){
-			
-					$i = 0;
-					foreach( $details['options'] as $option ){
-						
-						if( strpos( $option, '%' ) === false ){	
-							$label = $option;
-							if( !empty( $details['values'] ) )
-								$value_attr = $details['values'][$i];
-							else 
-								$value_attr = $option;
-						}
-						else{
-							$option_parts = explode( '%', $option );
-							if( !empty( $option_parts ) ){
-								if( empty( $option_parts[0] ) && count( $option_parts ) == 3 ){
-									$label = $option_parts[1];
-									if( !empty( $details['values'] ) )
-										$value_attr = $details['values'][$i];
-									else
-										$value_attr = $option_parts[2];
-								}
-							}
-						}
-							
-						$element .= '<option value="'. esc_attr( $value_attr ) .'"  '. selected( $value_attr, $value, false ) .' >'. esc_html( $label ) .'</option>';
-						$i++;
-					}
-			}				
-				
-			$element .= '</select>';
-		}
-		
-		if($details['type'] == 'checkbox'){
-			
-			if( !empty( $details['options'] ) ){
-				$element .= '<div class="wck-checkboxes">';
-				foreach( $details['options'] as $option ){
-					$found = false;						
-					
-					if( !is_array( $value ) )
-						$values = explode( ', ', $value );						
-					else
-						$values = $value;	
-					
-					if( strpos( $option, '%' ) === false  ){
-						$label = $option;
-						$value_attr = $option;
-						if ( in_array( $option, $values ) ) 
-							$found = true;
-					}
-					else{
-						$option_parts = explode( '%', $option );
-						if( !empty( $option_parts ) ){
-							if( empty( $option_parts[0] ) && count( $option_parts ) == 3 ){
-								$label = $option_parts[1];
-								$value_attr = $option_parts[2];
-								if ( in_array( $option_parts[2], $values ) ) 
-									$found = true;
-							}
-						}
-					}
-						
-					$element .= '<div><label><input type="checkbox" name="'. esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'" id="'. $frontend_prefix . esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] . '_' . $value_attr ) ) ) .'" value="'. esc_attr( $value_attr ) .'"  '. checked( $found, true, false ) .'class="mb-checkbox mb-field" />'. esc_html( $label ) .'</label></div>' ;
-				}
-				$element .= '</div>';
-			}
-			
-		}
-		
-		if($details['type'] == 'radio'){
-			
-			if( !empty( $details['options'] ) ){
-				$element .= '<div class="wck-radiobuttons">';
-				foreach( $details['options'] as $option ){
-					$found = false;
-					
-					$values = explode( ', ', $value );						
-					if( strpos( $option, '%' ) === false  ){
-						$label = $option;
-						$value_attr = $option;
-						if ( in_array( $option, $values ) ) 
-							$found = true;
-					}
-					else{
-						$option_parts = explode( '%', $option );
-						if( !empty( $option_parts ) ){
-							if( empty( $option_parts[0] ) && count( $option_parts ) == 3 ){
-								$label = $option_parts[1];
-								$value_attr = $option_parts[2];
-								if ( in_array( $option_parts[2], $values ) ) 
-									$found = true;
-							}
-						}
-					}
-							
-					$element .= '<div><label><input type="radio" name="'. esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'" id="'. $frontend_prefix . esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] . '_' . $value_attr ) ) ) .'" value="'. esc_attr( $value_attr ) .'"  '. checked( $found, true, false ) .'class="mb-radio mb-field" />'. esc_html( $label ) .'</label></div>';
-				}
-				$element .= '</div>';
-			}
-			
-		}		
-		
-		
-		if($details['type'] == 'upload'){
-			/* define id's for input and info div */
-			$upload_input_id = str_replace( '-', '_', sanitize_title_with_dashes( remove_accents( $meta . $details['title'] ) ) );
-			$upload_info_div_id = str_replace( '-', '_', sanitize_title_with_dashes( remove_accents( $meta .'_info_container_'. $details['title'] ) ) );
-			
-			/* hidden input that will hold the attachment id */
-			$element .= '<input id="'. esc_attr( $upload_input_id ) .'" type="hidden" size="36" name="'. esc_attr( sanitize_title_with_dashes( remove_accents ( $details['title'] ) ) ) .'" value="'. $value .'" class="mb-text-input mb-field"/>';
-			
-			/* container for the image preview (or file ico) and name and file type */
-			if( !empty ( $value ) ){
-				$file_src = wp_get_attachment_url($value);
-				$thumbnail = wp_get_attachment_image( $value, array( 80, 60 ), true );
-				$file_name = get_the_title( $value );
-				
-				if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $value ), $matches ) )
-					$file_type = esc_html( strtoupper( $matches[1] ) );
-				else
-					$file_type = strtoupper( str_replace( 'image/', '', get_post_mime_type( $value ) ) );
-			}
-			$element .= '<div id="'. esc_attr( $upload_info_div_id ) .'" class="upload-field-details">'. $thumbnail .'<p><span class="file-name">'. $file_name .'</span><span class="file-type">'. $file_type . '</span>';
-			if( !empty ( $value ) )
-				$element .= '<span class="wck-remove-upload">'.__( 'Remove', 'wck' ).'</span>';
-			$element .= '</p></div>';
-			/* the upload link. we send through get the hidden input id, details div id and meta name */
-			if( $details['attach_to_post'] )
-				$attach_to_post = 'post_id='. get_the_id() .'&amp;';
-			else
-				$attach_to_post = '';
-				
-			$media_upload_url = 'media-upload.php?'.$attach_to_post.'type=file&amp;mb_type='. $var_prefix  . esc_js(strtolower( $upload_input_id ) ).'&amp;mb_info_div='.$var_prefix  . esc_js(strtolower( $upload_info_div_id ) ).'&amp;meta_name='.$meta.'&amp;TB_iframe=1';			
-			
-			$media_upload_url = admin_url( $media_upload_url );
-				
-			$element .= '<a id="upload_'. esc_attr(sanitize_title_with_dashes( remove_accents( $details['title'] ) )) .'_button" class="button" onclick="tb_show(\'\', \''.$media_upload_url.'\');">'. __( 'Upload ', 'wck' ) . $details['title'] .' </a>';
-			
-			/* add js global var for the hidden input, and info container div */
-			$element .= '<script type="text/javascript">';				
-				$element .= 'window.'. $var_prefix . strtolower( $upload_input_id ) .' = jQuery(\''.$edit_class.'#'. $upload_input_id.'\');';
-				$element .= 'window.'. $var_prefix . strtolower( $upload_info_div_id ) .' = jQuery(\''.$edit_class.'#'. $upload_info_div_id.'\');';
-			$element .= '</script>';
-		}	
-
-		if($details['type'] == 'wysiwyg editor'){			
-			$element .= '<textarea name="'. esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'" style="vertical-align:top;width:400px;height:200px" class="mb-textarea mb-field '. esc_attr( sanitize_title_with_dashes( remove_accents( $details['title'] ) ) ) .'">'. esc_html( $value ) .'</textarea>'; 			
-			$element .= '<script type="text/javascript">jQuery( function(){ wckInitTinyMCE("'. sanitize_title_with_dashes( remove_accents( $details['title'] ) ) .'")});</script>';
-			
+		/* 
+		include actual field type
+		possible field types: text, textarea, select, checkbox, radio, upload, wysiwyg editor, datepicker, country select, user select 
+		*/
+		//$details['type'] = str_replace( ' ', '-', trim( $details['type'] ) );
+		if( file_exists( dirname( __FILE__ ).'/fields/'.$details['type'].'.php' ) ){
+			require( dirname( __FILE__ ).'/fields/'.$details['type'].'.php' );
 		}
 		
 		if( !empty( $details['description'] ) ){
@@ -530,6 +377,8 @@ class Wordpress_Creation_Kit{
 			}
 		}
 		$list .= '</table>';
+		
+		$list = apply_filters('wck_metabox_content_'.$meta, $list, $id);
 		return $list;
 	}
 	
@@ -631,6 +480,11 @@ class Wordpress_Creation_Kit{
 		wp_enqueue_script( 'wck-tinymce' );		
 		wp_register_script( 'wck-tinymce-init', plugins_url( '/assets/js/tiny_mce/wck_tiny_mce_init.js', __FILE__ ), array(), '1.0', true );
 		wp_enqueue_script( 'wck-tinymce-init' );
+		
+		//datepicker
+		wp_enqueue_script('jquery-ui-datepicker');
+		wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+
 	}	
 
 	/* Helper function for required fields */
@@ -693,14 +547,12 @@ class Wordpress_Creation_Kit{
 		else if ( $this->args['context'] == 'option' )
 			update_option( $meta, $results );
 		
-		/* if wpml_compatibility is true add for each entry separete post meta for every element of the form  */
-		if( $this->args['wpml_compatibility'] && $this->args['context'] == 'post_meta' ){
+		/* if unserialize_fields is true add for each entry separete post meta for every element of the form  */
+		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){
 			
 			$meta_suffix = count( $results );
-			$i=1;
 			foreach( $values as $name => $value ){
-				update_post_meta($id, 'wckwpml_'.$meta.'_'.$name.'_'.$meta_suffix.'_'.$i, $value);
-				$i++;
+				update_post_meta($id, $meta.'_'.$name.'_'.$meta_suffix, $value);
 			}
 		}
 		
@@ -738,14 +590,12 @@ class Wordpress_Creation_Kit{
 		else if ( $this->args['context'] == 'option' )
 			update_option( $meta, $results );
 		
-		/* if wpml_compatibility is true update the coresponding post metas for every element of the form  */
-		if( $this->args['wpml_compatibility'] && $this->args['context'] == 'post_meta' ){
+		/* if unserialize_fields is true update the coresponding post metas for every element of the form  */
+		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){
 			
-			$meta_suffix = $element_id + 1;
-			$i = 1;
+			$meta_suffix = $element_id + 1;			
 			foreach( $values as $name => $value ){
-				update_post_meta($id, 'wckwpml_'.$meta.'_'.$name.'_'.$meta_suffix.'_'.$i, $value);
-				$i++;
+				update_post_meta($id, $meta.'_'.$name.'_'.$meta_suffix, $value);				
 			}
 		}
 		
@@ -830,16 +680,14 @@ class Wordpress_Creation_Kit{
 		
 		
 		/* TODO: optimize so that it updates from the deleted element forward */
-		/* if wpml_compatibility is true delete the coresponding post metas */
-		if( $this->args['wpml_compatibility'] && $this->args['context'] == 'post_meta' ){			
+		/* if unserialize_fields is true delete the coresponding post metas */
+		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){			
 			
 			$meta_suffix = 1;			
 						
-			foreach( $results as $result ){
-				$i = 1;
+			foreach( $results as $result ){				
 				foreach ( $result as $name => $value){					
-					update_post_meta($id, 'wckwpml_'.$meta.'_'.$name.'_'.$meta_suffix.'_'.$i, $value);
-					$i++;
+					update_post_meta($id, $meta.'_'.$name.'_'.$meta_suffix, $value);					
 				}
 				$meta_suffix++;			
 			}
@@ -847,11 +695,9 @@ class Wordpress_Creation_Kit{
 			if( count( $results ) == 0 )
 				$results = $old_results;
 			
-			foreach( $results as $result ){
-				$i = 1;
+			foreach( $results as $result ){				
 				foreach ( $result as $name => $value){
-					delete_post_meta( $id, 'wckwpml_'.$meta.'_'.$name.'_'.$meta_suffix.'_'.$i );
-					$i++;
+					delete_post_meta( $id, $meta.'_'.$name.'_'.$meta_suffix );					
 				}
 				break;
 			}
@@ -885,15 +731,13 @@ class Wordpress_Creation_Kit{
 			update_option( $meta, $results );
 		
 		
-		/* if wpml_compatibility is true reorder all the coresponding post metas  */
-		if( $this->args['wpml_compatibility'] && $this->args['context'] == 'post_meta' ){			
+		/* if unserialize_fields is true reorder all the coresponding post metas  */
+		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){			
 			
 			$meta_suffix = 1;
-			foreach( $new_results as $result ){
-				$i = 1;
+			foreach( $new_results as $result ){				
 				foreach ( $result as $name => $value){					
-					update_post_meta($id, 'wckwpml_'.$meta.'_'.$name.'_'.$meta_suffix.'_'.$i, $value);
-					$i++;
+					update_post_meta($id, $meta.'_'.$name.'_'.$meta_suffix, $value);					
 				}
 				$meta_suffix++;
 			}		
@@ -1008,17 +852,17 @@ class Wordpress_Creation_Kit{
 			
 		if( isset( $_GET['lang'] ) ){
 			
-			$has_wck_with_wpml_compatibility = false;
+			$has_wck_with_unserialize_fields = false;
 			$custom_field_keys = get_post_custom_keys( $post->ID );
 			foreach( $custom_field_keys as $custom_field_key ){
 				$custom_field_key = explode( '_', $custom_field_key );
 				if( $custom_field_key[0] == 'wckwpml' ){
-					$has_wck_with_wpml_compatibility = true;
+					$has_wck_with_unserialize_fields = true;
 					break;
 				}
 			}
 			
-			if($has_wck_with_wpml_compatibility){
+			if($has_wck_with_unserialize_fields){
 				add_meta_box( 'wck_sync_translation', __( 'Syncronize WCK', 'wck' ), array( &$this, 'wck_add_sync_box' ), $post->post_type, 'side', 'low' );
 			}
 			
@@ -1248,6 +1092,8 @@ class WCK_Page_Creator{
 			$wck_pages_hooknames[$this->args['menu_slug']] = $this->hookname;
 		}
 
+		do_action( 'wck_page_creator_after_init', $this->hookname );
+		
 		/* Create a hook for adding meta boxes. */
 		add_action( "load-{$this->hookname}", array( &$this, 'wck_settings_page_add_meta_boxes' ) );
 		/* Load the JavaScript needed for the screen. */
@@ -1256,7 +1102,7 @@ class WCK_Page_Creator{
 	}
 	
 	/**
-	 * Do action 'add_meta_boxes'. This hook isn't executed bu  default on a admin page so we have ot add it.
+	 * Do action 'add_meta_boxes'. This hook isn't executed by default on a admin page so we have to add it.
 	 */
 	function wck_settings_page_add_meta_boxes() {					
 		do_action( 'add_meta_boxes', $this->hookname );		
@@ -1324,8 +1170,17 @@ class WCK_Page_Creator{
 				<div class="metabox-holder">
 					<div class="post-box-container column-2 side"><?php do_meta_boxes( $this->hookname, 'side', null ); ?></div>
 					<div class="wck-post-body">
-						<div class="post-box-container column-1 normal"><?php do_meta_boxes( $this->hookname, 'normal', null ); ?></div>
-						<div class="post-box-container column-3 advanced"><?php do_meta_boxes( $this->hookname, 'advanced', null ); ?></div>					</div>
+						<div class="post-box-container column-1 normal">
+							<?php do_action( 'wck_before_column1_metabox_content', $this->hookname ); ?>
+							<?php do_meta_boxes( $this->hookname, 'normal', null ); ?>
+							<?php do_action( 'wck_after_column1_metabox_content', $this->hookname ); ?>
+						</div>
+						<div class="post-box-container column-3 advanced">
+							<?php do_action( 'wck_before_column3_metabox_content', $this->hookname ); ?>
+							<?php do_meta_boxes( $this->hookname, 'advanced', null ); ?>
+							<?php do_action( 'wck_after_column3_metabox_content', $this->hookname ); ?>
+						</div>					
+					</div>
 					
 				</div>			
 				
