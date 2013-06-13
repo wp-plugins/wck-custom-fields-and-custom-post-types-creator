@@ -123,12 +123,14 @@ function wck_cptc_create_cpts(){
 				'publicly_queryable' => true,
 				'show_ui' => $cpt['show-ui'] == 'false' ? false : true,
 				'show_in_nav_menus' => $cpt['show-in-nav-menus'] == 'false' ? false : true,
-				'show_in_menu' => $cpt['show-in-menu'] == 'true' ? true : $cpt['show-in-menu'],				
+				'show_in_menu' => $cpt['show-in-menu'] == 'true' ? true : $cpt['show-in-menu'],			
 				'has_archive' => $cpt['has-archive'] == 'false' ? false : true,
-				'hierarchical' => $cpt['hierarchical'] == 'false' ? false : true,							
-				'menu_position' => $cpt['menu-position'],				
+				'hierarchical' => $cpt['hierarchical'] == 'false' ? false : true,													
 				'supports' => explode( ', ', $cpt['supports'] )				
 			);
+			
+			if( !empty( $cpt['menu-position'] ) )
+				$args['menu_position'] = intval( $cpt['menu-position'] );
 			
 			if( has_filter( "wck_cptc_capabilities_{$cpt['post-type']}" ) )			
 				$args['capabilities'] = apply_filters( "wck_cptc_capabilities_{$cpt['post-type']}", $cpt['capability-type'] );
@@ -256,7 +258,7 @@ function wck_cptc_add_side_boxes(){
 }
 function wck_cptc_side_box_one(){
 	?>
-		<a href="http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>" width="260" height="385" alt="WCK-PRO"/></a>
+		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>" width="260" height="385" alt="WCK-PRO"/></a>
 	<?php
 }
 

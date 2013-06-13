@@ -234,6 +234,16 @@ function showUpdateFormMeta(value, id, element_id, nonce){
 
 /* remove the update form */
 function removeUpdateForm( id ){
+	jQuery('html, body').animate({
+		scrollTop: jQuery( '#'+id).prev().offset().top - 40	}, 700);
+	
+	jQuery( '#'+id).prev().animate({
+		backgroundColor: '#FFFF9C'
+	}, 700);
+	jQuery( '#'+id).prev().animate({
+		backgroundColor: 'none'
+	}, 700);
+	
 	jQuery( '#'+id ).remove();
 }
 
@@ -282,7 +292,18 @@ function updateMeta(value, id, element_id, nonce){
 				alert( response.error );
 			}
 			else{
+				jQuery('html, body').animate({
+					scrollTop: jQuery('#container_'+value+' #element_' + element_id).offset().top - 40 }, 700);
+	
+				jQuery('#container_'+value+' #element_' + element_id).animate({
+					backgroundColor: '#FFFF9C'
+				}, 700);
+				jQuery('#container_'+value+' #element_' + element_id).animate({
+					backgroundColor: 'none'
+				}, 700);
+				
 				jQuery('#update_container_'+value+'_'+element_id).remove();
+				
 				/* refresh the list */
 				jQuery.post( wckAjaxurl ,  { action:"wck_refresh_entry"+value, meta:value, id:id, element_id:element_id}, function(response) {	
 					jQuery('#container_'+value+' #element_'+element_id).replaceWith(response);
@@ -296,7 +317,7 @@ function updateMeta(value, id, element_id, nonce){
 						jQuery( '#container_' + value + " tbody" ).sortable("enable");
 					
 					jQuery('#container_'+value).parent().css('opacity','1');
-					jQuery('#mb-ajax-loading').remove();				
+					jQuery('#mb-ajax-loading').remove();
 				});
 			}
 		});	

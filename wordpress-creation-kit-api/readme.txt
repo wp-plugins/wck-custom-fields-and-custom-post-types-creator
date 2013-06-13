@@ -43,7 +43,7 @@ Default Parameters
 	'page_template' => '',
 	'post_id' => '',
 	'single' => false,
-	'wpml_compatibility' => false,
+	'unserialize_fields' => false,
 	'sortable' => true,
 	'context' => 'post_meta'
 	)	
@@ -91,7 +91,7 @@ $single
 
     Default: false	
 	
-$wpml_compatibility
+$unserialize_fields
 	(boolean) (optional) Set this to true if you want to enable wpml compatibility
 		
 $sortable
@@ -130,6 +130,6 @@ How to add into a plugin:
 
 WPML Compatibility
 
-When wpml_compatibility is true on a meta box, besides saving the contents of the box in one serialized custom field, we create automatically a custom field for every field in every entry. We do this because WPML can't handle serialized custom fields and also we will get good control on what actions we want to perform (don't translate, copy, translate ) on each of the fields. 
+When unserialize_fields is true on a meta box, besides saving the contents of the box in one serialized custom field, we create automatically a custom field for every field in every entry. We do this because WPML can't handle serialized custom fields and also we will get good control on what actions we want to perform (don't translate, copy, translate ) on each of the fields. 
 
 After the fields are translated with Icanlcalize and we have the translated post in our system, we can go on the translated post and press the "Syncronize WCK Translation" button which will create the serialized array from the individual custom fields.

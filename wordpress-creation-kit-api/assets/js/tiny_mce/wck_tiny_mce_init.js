@@ -20,7 +20,7 @@ function wckInitTinyMCE( element ){
 		// Skin options
 		skin : "wp_theme",
 		language : "en",
-		spellchecker_languages : "+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv",
+		spellchecker_languages : "+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv"
 		
 	});
 }
