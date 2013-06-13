@@ -138,8 +138,8 @@ Creating a taxonomy generally automatically creates a special query variable usi
 10. Taxonomy listing
 
 == Changelog ==
-1.0.1
-Fixed Menu Position argument for Custom Post Type Creator.
-Added filter for default_value.
-Fixed Template Select dropdown for Custom Fields Creator.
-Fixed a bug in Custom Fields Creator that prevented Options field in the process of creating custom fields from appearing.
+= 1.0.1 =
+* Fixed Menu Position argument for Custom Post Type Creator.
+* Added filter for default_value.
+* Fixed Template Select dropdown for Custom Fields Creator.
+* Fixed a bug in Custom Fields Creator that prevented Options field in the process of creating custom fields from appearing.
