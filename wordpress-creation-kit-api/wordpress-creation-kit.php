@@ -208,12 +208,13 @@ class Wordpress_Creation_Kit{
 	 * @param array $details Contains the details for the field.	 
 	 * @param string $value Contains input value;
 	 * @param string $context Context where the function is used. Depending on it some actions are preformed.;
+	 * @param int $post_id The post ID;
 	 * @return string $element input element html string.
 	 */
 	 
-	function wck_output_form_field( $meta, $details, $value = '', $context = '' ){
+	function wck_output_form_field( $meta, $details, $value = '', $context = '', $post_id = '' ){
 		$element = '';
-		
+	
 		if( $context == 'edit_form' ){
 			$edit_class = '.mb-table-container ';
 			$var_prefix = 'edit';
@@ -294,7 +295,7 @@ class Wordpress_Creation_Kit{
 						
 						?>
 							<li class="row-<?php echo esc_attr( Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) ?>">
-								<?php echo self::wck_output_form_field( $meta, $details ); ?>
+								<?php echo self::wck_output_form_field( $meta, $details, '', '', $post_id ); ?>
 							</li>
 						<?php
 						
@@ -354,7 +355,7 @@ class Wordpress_Creation_Kit{
 					
 					$form .= '<li class="row-'. esc_attr( Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) .'">';
 					
-					$form .= self::wck_output_form_field( $meta, $details, $value, 'edit_form' ); 
+					$form .= self::wck_output_form_field( $meta, $details, $value, 'edit_form', $id ); 
 					
 					$form .= '</li>';
 					
@@ -385,14 +386,18 @@ class Wordpress_Creation_Kit{
 	 * the meta to apear in custom fields box.
 	 * @param int $id Post id
 	 */
-	function wck_output_meta_content($meta, $id, $fields){		
+	function wck_output_meta_content($meta, $id, $fields, $box_args = '' ){	
+		/* in fep $this->args is empty so we need it as a parameter */
+		if( !empty( $box_args ) )			
+			$this->args = wp_parse_args( $box_args, $this->defaults );
+		
 		
 		if( $this->args['context'] == 'post_meta' || $this->args['context'] == '' )
 			$results = get_post_meta($id, $meta, true);
 		else if ( $this->args['context'] == 'option' )
 			$results = get_option( $meta );
 		
-		$list = '';
+		$list = '';	
 		$list .= '<table id="container_'.esc_attr($meta).'" class="mb-table-container widefat';
 		
 		if( $this->args['single'] ) $list .= ' single';
@@ -620,6 +625,9 @@ class Wordpress_Creation_Kit{
 			}
 		}
 		
+		$required_message .= apply_filters( "wck_extra_message", "", $fields, $required_fields, $meta, $values, $id );
+		$required_fields_with_errors = apply_filters( "wck_required_fields_with_errors", $required_fields_with_errors, $fields, $required_fields, $meta, $value, $id );
+
 		if( $required_message != '' ){			
 			$errors = array( 'error' => $required_message, 'errorfields' => $required_fields_with_errors );			
 		}
@@ -668,7 +676,7 @@ class Wordpress_Creation_Kit{
 		else if ( $this->args['context'] == 'option' )
 			update_option( $meta, $results );
 		
-		/* if unserialize_fields is true add for each entry separete post meta for every element of the form  */
+		/* if unserialize_fields is true add for each entry separate post meta for every element of the form  */
 		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){
 			
 			$meta_suffix = count( $results );
@@ -808,6 +816,9 @@ class Wordpress_Creation_Kit{
 		$element_id = $_POST['element_id'];	
 		
 		echo self::mb_update_form($this->args['meta_array'], $meta, $id, $element_id);
+		
+		do_action( 'wck_after_adding_form', $meta, $id, $element_id );
+		
 		exit;
 	}
 
@@ -1201,7 +1212,7 @@ class Wordpress_Creation_Kit{
 	 * @param string $string The input string from which we generate the slug	 
 	 * @return string $slug The henerated slug
 	 */
-	function wck_generate_slug( $string ){
+	static function wck_generate_slug( $string ){
 		$slug = rawurldecode( sanitize_title_with_dashes( remove_accents( $string ) ) );
 		return $slug;
 	}
