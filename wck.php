@@ -2,8 +2,8 @@
 /*
 Plugin Name: WCK - Custom Fields and Custom Post Types Creator
 Description: WordPress Creation Kit consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT's.
-Author: Reflection Media, Madalin Ungureanu
-Version: 1.0.3
+Author: Reflection Media, Madalin Ungureanu, sareiodata
+Version: 1.0.5
 Author URI: http://www.reflectionmedia.ro
 
 License: GPL2
@@ -52,19 +52,48 @@ function wck_remove_wck_submenu_page(){
 	remove_submenu_page( 'wck-page', 'wck-page' );
 }
 
+/* include template API */
+if( file_exists( dirname(__FILE__).'/wck-template-api/wck-template-api.php' ) )
+	require_once('wck-template-api/wck-template-api.php');
+
 /* include Start and Settings Page */
 require_once('wck-sas.php');
+
+$wck_tools = get_option( 'wck_tools' );
+if( $wck_tools ){
+	if( !empty( $wck_tools[0]['custom-fields-creator'] ) ){
+		$wck_cfc = $wck_tools[0]['custom-fields-creator'];		
+	}
+	if( !empty( $wck_tools[0]['custom-post-type-creator'] ) ){
+		$wck_cptc = $wck_tools[0]['custom-post-type-creator'];		
+	}
+	if( !empty( $wck_tools[0]['custom-taxonomy-creator'] ) ){
+		$wck_ctc = $wck_tools[0]['custom-taxonomy-creator'];		
+	}
+	if( !empty( $wck_tools[0]['frontend-posting'] ) ){
+		$wck_fep = $wck_tools[0]['frontend-posting'];		
+	}
+	if( !empty( $wck_tools[0]['option-pages-creator'] ) ){
+		$wck_opc = $wck_tools[0]['option-pages-creator'];		
+	}
+}
 /* include Custom Post Type Creator */
-require_once('wck-cptc.php');
+if( !isset( $wck_cptc ) || $wck_cptc == 'enabled' )
+	require_once('wck-cptc.php');
 /* include Custom Taxonomy Creator */
-require_once('wck-ctc.php');
+if( !isset( $wck_ctc ) || $wck_ctc == 'enabled' )
+	require_once('wck-ctc.php');
 /* include Custom Fields Creator */
-require_once('wck-cfc.php');
+if( !isset( $wck_cfc ) || $wck_cfc == 'enabled' )
+	require_once('wck-cfc.php');
+
+
+
 /* include FrontEnd Posting */
-if( file_exists( dirname(__FILE__).'/wck-fep.php' ) )
+if( file_exists( dirname(__FILE__).'/wck-fep.php' ) && ( !isset( $wck_fep ) || $wck_fep == 'enabled' ) )
 	require_once('wck-fep.php');
 /* include Option Page Creator */
-if( file_exists( dirname(__FILE__).'/wck-opc.php' ) )
+if( file_exists( dirname(__FILE__).'/wck-opc.php' ) && ( !isset( $wck_opc ) || $wck_opc == 'enabled' ) )
 	require_once('wck-opc.php');
 
 /* deactivation hook */
@@ -93,7 +122,7 @@ if (file_exists ($wck_premium_update . 'update-checker.php')){
 }
 
 /* include nested repeaters */
-if( file_exists( dirname(__FILE__).'/wordpress-creation-kit-api/wck-nested-repeaters/wck-nested-repeaters.php' ) )
-	require_once('wordpress-creation-kit-api/wck-nested-repeaters/wck-nested-repeaters.php');
+/* if( file_exists( dirname(__FILE__).'/wordpress-creation-kit-api/wck-nested-repeaters/wck-nested-repeaters.php' ) )
+	require_once('wordpress-creation-kit-api/wck-nested-repeaters/wck-nested-repeaters.php'); */
 
 ?>

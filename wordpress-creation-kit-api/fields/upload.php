@@ -31,9 +31,12 @@ if( !empty ( $value ) )
 	$element .= '<span class="wck-remove-upload">'.__( 'Remove', 'wck' ).'</span>';
 $element .= '</p></div>';
 /* the upload link. we send through get the hidden input id, details div id and meta name */
-if( !empty( $details['attach_to_post'] ) )
-	$attach_to_post = 'post_id='. get_the_id() .'&amp;';
-else
+if( !empty( $details['attach_to_post'] ) ){
+	if( get_the_id() != null ) 
+		$post_id = get_the_id();
+					
+	$attach_to_post = 'post_id='. $post_id .'&amp;';
+}else
 	$attach_to_post = '';
 
 if( empty( $var_prefix ) )
