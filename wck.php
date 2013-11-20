@@ -54,7 +54,7 @@ function wck_remove_wck_submenu_page(){
 
 /* include template API */
 if( file_exists( dirname(__FILE__).'/wck-template-api/wck-template-api.php' ) )
-	require_once('/wck-template-api/wck-template-api.php');
+	require_once('wck-template-api/wck-template-api.php');
 
 /* include Start and Settings Page */
 require_once('wck-sas.php');
