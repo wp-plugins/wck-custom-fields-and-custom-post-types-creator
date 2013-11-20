@@ -6,7 +6,7 @@ Tags: custom fields, custom field, wordpress custom fields, advanced custom fiel
 
 Requires at least: 3.1
 Tested up to: 3.7.1
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 
 A must have tool for creating custom fields, custom post types and taxonomies, fast and without any programming knowledge.
 
@@ -138,6 +138,9 @@ Creating a taxonomy generally automatically creates a special query variable usi
 10. Taxonomy listing
 
 == Changelog ==
+= 1.0.5 =
+* Fixed error from 1.0.4 require_once
+
 = 1.0.4 =
 * Added Custom Fields Api
 * Added option to enable/disable WCK tools(CFC, CPTC, FEP...) that you want/don't want to use 
