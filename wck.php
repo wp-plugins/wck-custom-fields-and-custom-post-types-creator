@@ -3,7 +3,7 @@
 Plugin Name: WCK - Custom Fields and Custom Post Types Creator
 Description: WordPress Creation Kit consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT's.
 Author: Reflection Media, Madalin Ungureanu, sareiodata
-Version: 1.0.5
+Version: 1.0.6
 Author URI: http://www.reflectionmedia.ro
 
 License: GPL2
@@ -76,6 +76,9 @@ if( $wck_tools ){
 	if( !empty( $wck_tools[0]['option-pages-creator'] ) ){
 		$wck_opc = $wck_tools[0]['option-pages-creator'];		
 	}
+	if( !empty( $wck_tools[0]['swift-templates'] ) ){
+		$wck_stp = $wck_tools[0]['swift-templates'];		
+	}
 }
 /* include Custom Post Type Creator */
 if( !isset( $wck_cptc ) || $wck_cptc == 'enabled' )
@@ -96,6 +99,10 @@ if( file_exists( dirname(__FILE__).'/wck-fep.php' ) && ( !isset( $wck_fep ) || $
 if( file_exists( dirname(__FILE__).'/wck-opc.php' ) && ( !isset( $wck_opc ) || $wck_opc == 'enabled' ) )
 	require_once('wck-opc.php');
 
+/* include Swift Templates */
+if( file_exists( dirname(__FILE__).'/wck-stp.php' ) && ( !isset( $wck_stp ) || $wck_stp == 'enabled' ) )
+	require_once('wck-stp.php');	
+	
 /* deactivation hook */
 register_deactivation_hook( __FILE__, 'wck_deactivate_function' );
 function wck_deactivate_function() {	

@@ -39,8 +39,11 @@ function wck_preprocess_field_textarea( $field ){
  */
  add_filter( 'wck_output_get_field_checkbox', 'wck_preprocess_field_checkbox', 10 );
 function wck_preprocess_field_checkbox( $field ){
-	$checkbox = explode( ', ', $field );
-	return $checkbox;
+	if( !empty( $field ) ){
+		$checkbox = explode( ', ', $field );
+		return $checkbox;
+	}
+	return array();
 }
 
 /**
@@ -53,9 +56,12 @@ function wck_preprocess_field_checkbox( $field ){
  * @return string $checkbox The processed field
  */
  add_filter( 'wck_output_the_field_checkbox', 'wck_preprocess_the_field_checkbox', 10 );
-function wck_preprocess_the_field_checkbox( $field ){
-	$checkbox_list = implode( ', ', $field );
-	return $checkbox_list;
+function wck_preprocess_the_field_checkbox( $field ){	
+	if( !empty( $field ) ){
+		$checkbox_list = implode( ', ', $field );
+		return $checkbox_list;
+	}
+	return '';
 }
 
 /**

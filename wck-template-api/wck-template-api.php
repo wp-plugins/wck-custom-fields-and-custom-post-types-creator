@@ -51,7 +51,7 @@ if( !function_exists( 'get_cfc_field' ) ){
  *	 
  */
 if( !function_exists( 'the_cfc_field' ) ){
-	function the_cfc_field( $meta_name, $field_name, $post_id = false, $key = 0   ){
+	function the_cfc_field( $meta_name, $field_name, $post_id = false, $key = 0, $do_echo = true ){
 		
 		$current_field = WCK_Template_API::get_field( $meta_name, $field_name, $post_id, $key );
 		
@@ -75,7 +75,11 @@ if( !function_exists( 'the_cfc_field' ) ){
 		if ( is_array( $current_field ) ){
 			return;
 		}
-		
-		echo $current_field;
+
+		if ( $do_echo ){
+			echo $current_field;
+		} else { 
+			return $current_field;
+		}
 	}
 }

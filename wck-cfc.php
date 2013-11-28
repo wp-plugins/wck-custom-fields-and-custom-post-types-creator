@@ -24,35 +24,36 @@ function wck_cfc_print_scripts($hook){
 add_action( 'init', 'wck_cfc_create_custom_fields_cpt' );
 
 function wck_cfc_create_custom_fields_cpt(){	
-			
-	$labels = array(
-		'name' => _x( 'WCK Custom Meta Boxes', 'post type general name'),
-		'singular_name' => _x( 'Custom Meta Box', 'post type singular name'),
-		'add_new' => _x( 'Add New', 'Custom Meta Box' ),
-		'add_new_item' => __( "Add New Meta Box", "wck" ),
-		'edit_item' => __( "Edit Meta Box", "wck" ) ,
-		'new_item' => __( "New Meta Box", "wck" ),
-		'all_items' => __( "Custom Fields Creator", "wck" ),
-		'view_item' => __( "View Meta Box", "wck" ),
-		'search_items' => __( "Search Meta Boxes", "wck" ),
-		'not_found' =>  __( "No Meta Boxes found", "wck" ),
-		'not_found_in_trash' => __( "No Meta Boxes found in Trash", "wck" ), 
-		'parent_item_colon' => '',
-		'menu_name' => __( "Custom Meta Boxes", "wck" )
-	);
-	$args = array(
-		'labels' => $labels,
-		'public' => true,
-		'publicly_queryable' => false,
-		'show_ui' => true, 	
-		'show_in_menu' => 'wck-page', 				
-		'has_archive' => false,
-		'hierarchical' => false,									
-		'capability_type' => 'post',
-		'supports' => array( 'title' )	
-	);			
-			
-	register_post_type( 'wck-meta-box', $args );		
+	if( is_admin() && current_user_can( 'edit_theme_options' ) ){		
+		$labels = array(
+			'name' => _x( 'WCK Custom Meta Boxes', 'post type general name'),
+			'singular_name' => _x( 'Custom Meta Box', 'post type singular name'),
+			'add_new' => _x( 'Add New', 'Custom Meta Box' ),
+			'add_new_item' => __( "Add New Meta Box", "wck" ),
+			'edit_item' => __( "Edit Meta Box", "wck" ) ,
+			'new_item' => __( "New Meta Box", "wck" ),
+			'all_items' => __( "Custom Fields Creator", "wck" ),
+			'view_item' => __( "View Meta Box", "wck" ),
+			'search_items' => __( "Search Meta Boxes", "wck" ),
+			'not_found' =>  __( "No Meta Boxes found", "wck" ),
+			'not_found_in_trash' => __( "No Meta Boxes found in Trash", "wck" ), 
+			'parent_item_colon' => '',
+			'menu_name' => __( "Custom Meta Boxes", "wck" )
+		);
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => false,
+			'show_ui' => true, 	
+			'show_in_menu' => 'wck-page', 				
+			'has_archive' => false,
+			'hierarchical' => false,									
+			'capability_type' => 'post',
+			'supports' => array( 'title' )	
+		);			
+				
+		register_post_type( 'wck-meta-box', $args );
+	}
 }
 
 /* add admin body class to cfc custom post type */
@@ -96,7 +97,7 @@ function wck_cfc_create_box(){
 	$post_type_names = array();
 	if( !empty( $post_types ) ){
 		foreach ($post_types  as $post_type ) {
-			if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' ) 
+			if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' && $post_type->name != 'wck-swift-template' ) 
 				$post_type_names[] = $post_type->name;
 		}
 	}
@@ -514,7 +515,7 @@ function wck_cfc_add_side_boxes(){
 }
 function wck_cfc_side_box_one(){
 	?>
-		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>" width="260" height="385" alt="WCK-PRO"/></a>
+		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>?v=1" width="260" height="385" alt="WCK-PRO"/></a>
 	<?php
 }
 

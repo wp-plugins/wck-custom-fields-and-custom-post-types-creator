@@ -27,7 +27,7 @@ function wck_ctc_create_box(){
 		$post_type_names = array(); 
 		if( !empty( $post_types ) ){
 			foreach ( $post_types  as $post_type ) {
-				if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' ) 
+				if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' && $post_type->name != 'wck-swift-template' ) 
 					$post_type_names[] = $post_type->name;
 			}
 		}
@@ -104,9 +104,12 @@ function wck_ctc_create_taxonomy(){
 				'public' => $ct['public'] == 'false' ? false : true,								
 				'show_ui' => $ct['show-ui'] == 'false' ? false : true, 								
 				'hierarchical' => $ct['hierarchical'] == 'false' ? false : true,
-				'show_tagcloud' => $ct['show-tagcloud'] == 'false' ? false : true,
-				'show_admin_column' => $ct['show-admin-column'] == 'false' ? false : true
-			);
+				'show_tagcloud' => $ct['show-tagcloud'] == 'false' ? false : true				
+			);			
+			
+			if( !empty( $ct['show-admin-column'] ) ){
+				$args['show_admin_column'] = $ct['show-admin-column'] == 'false' ? false : true;
+			}
 
 			if( !empty( $ct['attach-to'] ) )
 				$object_type = explode( ', ', $ct['attach-to'] );
@@ -220,7 +223,7 @@ function wck_ctc_add_side_boxes(){
 }
 function wck_ctc_side_box_one(){
 	?>
-		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>" width="260" height="385" alt="WCK-PRO"/></a>
+		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>?v=1" width="260" height="385" alt="WCK-PRO"/></a>
 	<?php
 }
 

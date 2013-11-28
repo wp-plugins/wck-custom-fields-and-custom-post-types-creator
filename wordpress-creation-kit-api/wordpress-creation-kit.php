@@ -16,6 +16,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 if( file_exists( dirname(__FILE__). '/wck-fep/wck-fep.php' ) )
 	require_once( 'wck-fep/wck-fep.php' );
 
+if( file_exists( dirname(__FILE__). '/wck-static-metabox-api.php' ) )
+	require_once( 'wck-static-metabox-api.php' );
+	
+	
 /* 
 
 Usage Example 1:
@@ -259,6 +263,8 @@ class Wordpress_Creation_Kit{
 		
 		$element .= '</div><!-- .mb-right-column -->';
 		
+		$element = apply_filters( "wck_output_form_field_{$meta}_" . Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ), $element ); 
+		
 		return $element;
 				
 	}
@@ -451,7 +457,7 @@ class Wordpress_Creation_Kit{
 				
 				/* display it differently based on field type*/
 				if( $details['type'] == 'upload' ){	
-					$display_value = self::wck_get_entry_field_avatar($value);
+					$display_value = self::wck_get_entry_field_upload($value);
 				} elseif ( $details['type'] == 'user select' ) {
 					$display_value = self::wck_get_entry_field_user_select( $value ) . '</pre>';
 				} elseif ( $details['type'] == 'cpt select' ){
@@ -501,8 +507,8 @@ class Wordpress_Creation_Kit{
 		return $list;
 	}
 
-	/* function to generate output for avatar */
-	function wck_get_entry_field_avatar($id){
+	/* function to generate output for upload field */
+	function wck_get_entry_field_upload($id){
 		if( !empty ( $id ) && is_numeric( $id ) ){				
 			$file_src = wp_get_attachment_url($id);
 			$thumbnail = wp_get_attachment_image( $id, array( 80, 60 ), true );

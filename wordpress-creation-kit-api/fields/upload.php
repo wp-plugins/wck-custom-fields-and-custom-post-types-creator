@@ -32,13 +32,10 @@ if( !empty ( $value ) )
 $element .= '</p></div>';
 /* the upload link. we send through get the hidden input id, details div id and meta name */
 if( !empty( $details['attach_to_post'] ) ){
-	if( get_the_id() != null ) 
-		$post_id = get_the_id();
-					
 	$attach_to_post = 'post_id='. $post_id .'&amp;';
-}else
+}else {
 	$attach_to_post = '';
-
+}
 if( empty( $var_prefix ) )
 	$var_prefix = '';
 if( empty( $edit_class ) )	
