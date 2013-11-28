@@ -50,8 +50,34 @@ function wck_sas_create_box(){
 		$wck_premium_update = WCK_PLUGIN_DIR.'/update/';
 		if (file_exists ($wck_premium_update . 'update-checker.php'))
 			new Wordpress_Creation_Kit( $args );
-	}
+				
+		/* set up the tools array */			
+		$sas_tools_activate = array(
+			array( 'type' => 'radio', 'title' => __( 'Custom Fields Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
+			array( 'type' => 'radio', 'title' => __( 'Custom Post Type Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
+			array( 'type' => 'radio', 'title' => __( 'Custom Taxonomy Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
+		);
+		if( file_exists( dirname(__FILE__).'/wck-fep.php' ) )
+			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Frontend Posting', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
+		if( file_exists( dirname(__FILE__).'/wck-opc.php' ) )
+			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Option Pages Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
+		if( file_exists( dirname(__FILE__).'/wck-stp.php' ) )
+			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
+			
+		/* set up the box arguments */
+		$args = array(
+			'metabox_id' => 'wck_tools_activate',
+			'metabox_title' => __( 'WordPress Creation Kit Tools: enable or disable the tools you want', 'wck' ),
+			'post_type' => 'sas-page',
+			'meta_name' => 'wck_tools',
+			'meta_array' => $sas_tools_activate,	
+			'context' 	=> 'option',
+			'single' => true
+		);
 
+		/* create the box */
+		new Wordpress_Creation_Kit( $args );
+	}
 }
 
 /* Add the welcoming text on WCK Start and Settings Page */
@@ -96,6 +122,9 @@ function wck_sas_quickintro($hook){
 					<p><?php _e( 'Create new taxonomies for filtering your content', 'wck' ); ?></p>
 					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/wordpress-creation-kit/custom-taxonomy-creator/" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>
 					
+					<h4><?php _e( 'Swift Templates (available in the Pro version)', 'wck' ); ?></h4>
+					<p><?php _e( 'Build your front-end templates directly from the WordPress admin UI, without writing any PHP code.', 'wck' ); ?></p>
+					
 					<h4><?php _e( 'Front-End Posting (available in the Pro version)', 'wck' ); ?></h4>
 					<p><?php _e( 'Create and edit posts/pages or custom posts directly from the front-end.', 'wck' ); ?></p>					
 					<p><?php _e( 'Available shortcodes:', 'wck' ); ?></p>					
@@ -120,6 +149,8 @@ function wck_sas_quickintro($hook){
 /* add refresh to page. Needed to display the serial notification. Need to refactor in the future so it works via ajax. */
 add_action("wck_refresh_list_wck_serial", "wck_serial_after_refresh_list");
 add_action("wck_refresh_entry_wck_serial", "wck_serial_after_refresh_list");
+add_action("wck_refresh_list_wck_tools", "wck_serial_after_refresh_list");
+add_action("wck_refresh_entry_wck_tools", "wck_serial_after_refresh_list");
 function wck_serial_after_refresh_list(){
 	echo '<script type="text/javascript">window.location="'. get_admin_url() . 'admin.php?page=sas-page&updated=true' .'";</script>';
 }

@@ -1,12 +1,12 @@
 === WCK - Custom Fields and Custom Post Types Creator === 
 
-Contributors: reflectionmedia, madalin.ungureanu
+Contributors: reflectionmedia, madalin.ungureanu, sareiodata
 Donate link: http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/
 Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, repeater fields, repeater, repeatable, meta box, meta boxes, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
 
 Requires at least: 3.1
-Tested up to: 3.6.1
-Stable tag: 1.0.3
+Tested up to: 3.7.1
+Stable tag: 1.0.6
 
 A must have tool for creating custom fields, custom post types and taxonomies, fast and without any programming knowledge.
 
@@ -42,12 +42,13 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 = WCK PRO =
   The [PRO version](http://www.cozmoslabs.com/wordpress-creation-kit/) offers:
   
+* Swift Templates - Build your front-end templates directly from the WordPress admin UI, without writing any PHP code
 * Front-end Posting - form builder for content creation and editing
 * Options Page Creator - create option pages for your theme or your plugin
 * More field types: Datepicker, Country Select, User Select
 * Premium Email Support for your project
   
- [See complete list of features](http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/)
+ [See complete list of features](http://www.cozmoslabs.com/wordpress-creation-kit/)
 
 = Website =
 http://www.cozmoslabs.com/wordpress-creation-kit/
@@ -138,6 +139,21 @@ Creating a taxonomy generally automatically creates a special query variable usi
 10. Taxonomy listing
 
 == Changelog ==
+= 1.0.6 =
+* WCK menu now only appears for Administrator role only
+* Minor fixes and improvements
+
+= 1.0.5 =
+* Fixed error from 1.0.4 require_once
+
+= 1.0.4 =
+* Added Custom Fields Api
+* Added option to enable/disable WCK tools(CFC, CPTC, FEP...) that you want/don't want to use 
+* Labels of required custom fields turn red when empty 
+* Added in Custom Taxonomy Creator support for show_admin_column argument that allows automatic creation of taxonomy columns on associated post-types
+* Improved visibility of WCK Help tab
+* We no longer get js error when deregistering wysiwig init script
+
 = 1.0.3 =
 * Removed all notices and warnings from the code
 
