@@ -42,7 +42,7 @@ function wck_cfc_create_custom_fields_cpt(){
 		);
 		$args = array(
 			'labels' => $labels,
-			'public' => true,
+			'public' => false,
 			'publicly_queryable' => false,
 			'show_ui' => true, 	
 			'show_in_menu' => 'wck-page', 				

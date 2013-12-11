@@ -195,7 +195,8 @@ function wck_sas_check_serial_number(){
 		return;
 		
 	$serial = get_option('wck_serial');
-	$serial = $serial[0]['serial-number'];
+	if( !empty( $serial[0] ) )
+		$serial = urlencode( $serial[0]['serial-number'] );
 	if(empty($serial) || $serial == '') {
 		update_option( 'wck_serial_status', 'noserial' ); //server down
 	} else {

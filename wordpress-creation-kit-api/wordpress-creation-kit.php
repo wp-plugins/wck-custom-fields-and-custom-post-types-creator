@@ -602,7 +602,7 @@ class Wordpress_Creation_Kit{
 		
 		//datepicker
 		wp_enqueue_script('jquery-ui-datepicker');		
-		wp_enqueue_style('jquery-style', plugins_url( '', dirname(__FILE__) ).'/assets/datepicker/datepicker.css');
+		wp_enqueue_style( 'jquery-style', plugins_url( '/assets/datepicker/datepicker.css', __FILE__ ) );
 
 	}	
 
