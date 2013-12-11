@@ -111,7 +111,7 @@ Parameters for meta_array
 'description'		(string) The description of the field.
 'required'			(boolean) true if the field is required.
 'default'			(string) If you want the string to have a default value enter it here. For Checkboxes if there are multiple
-							 values separete them with a ",".
+							 values separate them with a ",".
 'default-option'	(boolean) true if you want Select to have a default option.
 'options'			(array) Options for field types "select", "checkbox" and "radio". 
 	
