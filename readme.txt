@@ -1,8 +1,8 @@
-=== WCK - Custom Fields and Custom Post Types Creator === 
+=== WCK - Custom Fields, Taxonomy and Custom Post Types Creator === 
 
 Contributors: reflectionmedia, madalin.ungureanu, sareiodata
-Donate link: http://www.cozmoslabs.com/wordpress-creation-kit-sale-page/
-Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, repeater fields, repeater, repeatable, meta box, meta boxes, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
+Donate link: http://www.cozmoslabs.com/wordpress-creation-kit/
+Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, repeater fields, repeater, repeatable fields, meta box, meta boxes, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
 
 Requires at least: 3.1
 Tested up to: 3.8
@@ -15,32 +15,34 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 
 **WordPress Creation Kit** consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT's.
 
-**WCK Custom Fields Creator** offers an UI for setting up custom meta boxes for your posts, pages or custom post types. Uses standard custom fields to store data.
+**WCK Custom Fields Creator** offers an UI for setting up custom meta boxes with custom fields for your posts, pages or custom post types. Uses standard custom fields to store data.
 
 **WCK Custom Post Type Creator** facilitates creating custom post types by providing an UI for most of the arguments of register_post_type() function.
 
 **WCK Taxonomy Creator** allows you to easily create and edit custom taxonomies for WordPress without any programming knowledge. It provides an UI for most of the arguments of register_taxonomy() function.
 
+[youtube http://www.youtube.com/watch?v=_ueYKlP_i7w]
+
 = Custom Fields =
 * Custom fields types: wysiwyg editor, upload, text, textarea, select, checkbox, radio
 * Easy to create custom fields for any post type.
-* Support for **Repeater Fields** and **Repeater Groups**.
+* Support for **Repeater Fields** and **Repeater Groups** of custom fields.
 * Drag and Drop to sort the Repeater Fields.
 * Support for all input fields: text, textarea, select, checkbox, radio.
 * Image / File upload supported via the WordPress Media Uploader.
 * Possibility to target only certain page-templates, target certain custom post types and even unique ID's.
-* All data handling is done with ajax
+* All data handling is done with Ajax
 * Data is saved as postmeta
 
 = Custom Post Types and Taxonomy =
 * Create and edit Custom Post Types from the Admin UI
 * Advanced Labeling Options
 * Attach built in or custom taxonomies to post types
-* Create and edit Custom Taxonomies from the Admin UI
-* Attach the taxonomies to built in or custom post types
+* Create and edit Custom Taxonomy from the Admin UI
+* Attach the taxonomy to built in or custom post types
 
 = WCK PRO =
-  The [PRO version](http://www.cozmoslabs.com/wordpress-creation-kit/) offers:
+  The [WCK PRO version](http://www.cozmoslabs.com/wordpress-creation-kit/) offers:
   
 * Swift Templates - Build your front-end templates directly from the WordPress admin UI, without writing any PHP code
 * Front-end Posting - form builder for content creation and editing
@@ -48,7 +50,7 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 * More field types: Datepicker, Country Select, User Select
 * Premium Email Support for your project
   
- [See complete list of features](http://www.cozmoslabs.com/wordpress-creation-kit/)
+ [See complete list of PRO features](http://www.cozmoslabs.com/wordpress-creation-kit/)
 
 = Website =
 http://www.cozmoslabs.com/wordpress-creation-kit/
@@ -57,7 +59,7 @@ http://www.cozmoslabs.com/wordpress-creation-kit/
 http://www.cozmoslabs.com/3747-wordpress-creation-kit-a-sparkling-new-custom-field-taxonomy-and-post-type-creator/
 
 = Documentation =
-http://www.cozmoslabs.com/wordpress-creation-kit/custom-fields-creator/
+http://www.cozmoslabs.com/docs/wordpress-creation-kit-documentation/
 
 = Bug Submission and Forum Support =
 http://www.cozmoslabs.com/forums/forum/wordpresscreationkit/
@@ -95,7 +97,7 @@ So as you can see the Meta Name 'books' is used as the $key parameter of the fun
 
 This is true even for single entries.
 
-= How to query by post type in the front end? =
+= How to query by post type in the front-end? =
 
 You can create new queries to display posts from a specific post type. This is done via the 'post_type' parameter to a WP_Query.
 
@@ -112,7 +114,7 @@ endwhile;?>`
 
 This simply loops through the latest 10 product posts and displays the title and content of them. 
 
-= How do I list the taxonomies in the front end? =
+= How do I list the taxonomies in the front-end? =
 
 If you want to have a custom list in your theme, then you can pass the taxonomy name into the the_terms() function in the Loop, like so:
 
@@ -120,7 +122,7 @@ If you want to have a custom list in your theme, then you can pass the taxonomy 
 
 That displays the list of People attached to each post.
 
-= How do I query by taxonomy in the frontend? =
+= How do I query by taxonomy in the front-end? =
 
 Creating a taxonomy generally automatically creates a special query variable using WP_Query class, which we can use to retrieve posts based on. For example, to pull a list of posts that have 'Bob' as a 'person' taxomony in them, we will use:
 
