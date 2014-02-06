@@ -1,8 +1,8 @@
-=== WCK - Custom Fields, Taxonomy and Custom Post Types Creator === 
+=== WCK - Custom Fields, Post Types and Taxonomy Creator === 
 
 Contributors: reflectionmedia, madalin.ungureanu, sareiodata
 Donate link: http://www.cozmoslabs.com/wordpress-creation-kit/
-Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, repeater fields, repeater, repeatable fields, meta box, meta boxes, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
+Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, cpt, post type, repeater fields, repeater, repeatable fields, meta box, meta boxes, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
 
 Requires at least: 3.1
 Tested up to: 3.8
@@ -25,10 +25,10 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 
 = Custom Fields =
 * Custom fields types: wysiwyg editor, upload, text, textarea, select, checkbox, radio
-* Easy to create custom fields for any post type.
+* Easy to create **custom fields** for any **post type**.
 * Support for **Repeater Fields** and **Repeater Groups** of custom fields.
 * Drag and Drop to sort the Repeater Fields.
-* Support for all input fields: text, textarea, select, checkbox, radio.
+* Support for all input custom fields: text, textarea, select, checkbox, radio.
 * Image / File upload supported via the WordPress Media Uploader.
 * Possibility to target only certain page-templates, target certain custom post types and even unique ID's.
 * All data handling is done with Ajax
@@ -47,7 +47,7 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 * Swift Templates - Build your front-end templates directly from the WordPress admin UI, without writing any PHP code
 * Front-end Posting - form builder for content creation and editing
 * Options Page Creator - create option pages for your theme or your plugin
-* More field types: Datepicker, Country Select, User Select
+* More field types: Date-picker, Country Select, User Select, CPT Select
 * Premium Email Support for your project
   
  [See complete list of PRO features](http://www.cozmoslabs.com/wordpress-creation-kit/)
@@ -131,10 +131,10 @@ Creating a taxonomy generally automatically creates a special query variable usi
 ==Screenshots==
 1. Creating custom post types and taxonomies
 2. Creating custom fields and meta boxes
-3. List of Meta boxes
+3. Custom Fields Creator - list of Meta boxes
 4. Meta box with custom fields
 5. Defined custom fields
-6. Meta box arguments
+6. Custom Fields Creator - Meta box arguments
 7. Post Type Creator UI
 8. Post Type Creator UI and listing
 9. Taxonomy Creator UI
