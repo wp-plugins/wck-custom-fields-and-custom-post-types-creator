@@ -25,7 +25,7 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 
 = Custom Fields =
 * Custom fields types: wysiwyg editor, upload, text, textarea, select, checkbox, radio
-* Easy to create **custom fields** for any **post type**.
+* Easy to create **custom fields** for any **post type** .
 * Support for **Repeater Fields** and **Repeater Groups** of custom fields.
 * Drag and Drop to sort the Repeater Fields.
 * Support for all input custom fields: text, textarea, select, checkbox, radio.
