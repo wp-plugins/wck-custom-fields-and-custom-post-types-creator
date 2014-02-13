@@ -1,8 +1,8 @@
-=== WCK - Custom Fields, Post Types and Taxonomy Creator === 
+=== WCK - Custom Fields and Custom Post Types Creator === 
 
 Contributors: reflectionmedia, madalin.ungureanu, sareiodata
 Donate link: http://www.cozmoslabs.com/wordpress-creation-kit/
-Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, cpt, post type, repeater fields, repeater, repeatable fields, meta box, meta boxes, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
+Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, cpt, post type, repeater fields, repeater, repeatable fields, meta box, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
 
 Requires at least: 3.1
 Tested up to: 3.8
@@ -25,7 +25,7 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 
 = Custom Fields =
 * Custom fields types: wysiwyg editor, upload, text, textarea, select, checkbox, radio
-* Easy to create **custom fields** for any **post type** .
+* Easy to create custom fields for any post type.
 * Support for **Repeater Fields** and **Repeater Groups** of custom fields.
 * Drag and Drop to sort the Repeater Fields.
 * Support for all input custom fields: text, textarea, select, checkbox, radio.
@@ -44,7 +44,7 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 = WCK PRO =
   The [WCK PRO version](http://www.cozmoslabs.com/wordpress-creation-kit/) offers:
   
-* Swift Templates - Build your front-end templates directly from the WordPress admin UI, without writing any PHP code
+* **Swift Templates** - Build your front-end templates directly from the WordPress admin UI, without writing any PHP code. Easily display registered custom post types, custom fields and taxonomies in your current theme.
 * Front-end Posting - form builder for content creation and editing
 * Options Page Creator - create option pages for your theme or your plugin
 * More field types: Date-picker, Country Select, User Select, CPT Select
