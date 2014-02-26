@@ -42,7 +42,7 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 * Attach the taxonomy to built in or custom post types
 
 = WCK PRO =
-  The [WCK PRO version](http://www.cozmoslabs.com/wordpress-creation-kit/) offers:
+  The [WCK PRO version](http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/) offers:
   
 * **Swift Templates** - Build your front-end templates directly from the WordPress admin UI, without writing any PHP code. Easily display registered custom post types, custom fields and taxonomies in your current theme.
 * Front-end Posting - form builder for content creation and editing
@@ -50,10 +50,10 @@ A must have tool for creating custom fields, custom post types and taxonomies, f
 * More field types: Date-picker, Country Select, User Select, CPT Select
 * Premium Email Support for your project
   
- [See complete list of PRO features](http://www.cozmoslabs.com/wordpress-creation-kit/)
+ [See complete list of PRO features](http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/)
 
 = Website =
-http://www.cozmoslabs.com/wordpress-creation-kit/
+http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/
 
 = Announcement Post and Video =
 http://www.cozmoslabs.com/3747-wordpress-creation-kit-a-sparkling-new-custom-field-taxonomy-and-post-type-creator/
