@@ -56,15 +56,20 @@ jQuery(document).ready(function(){
 				for( var i=0;i < attachments.length; i++ ){
 					// Do something with attachment.id and/or attachment.url here	
 					attids.push( attachments[i].id );
-					result = '<div class="upload-field-details" id="'+ uploadInputId +'_info_container" data-attachment_id="'+ attachments[i].id +'">';					
+					result = '<div class="upload-field-details" id="'+ uploadInputId +'_info_container" data-attachment_id="'+ attachments[i].id +'">';
+					console.log(attachments);
 					if( attachments[i].sizes != undefined ){
 						if( attachments[i].sizes.thumbnail != undefined )
 							thumb = attachments[i].sizes.thumbnail;
 						else
 							thumb = attachments[i].sizes.full;
-						result += '<div class="file-thumb"><img width="80" height="80" src="'+ thumb.url +'"/></div>';
-					result += '<p><span class="file-name">'+attachments[i].filename+'</span><span class="file-type">'+attachments[i].mime +'</span><span class="wck-remove-upload">Remove</span></p></div>';
+						thumbnailUrl = thumb.url;
 					}
+					else{
+						thumbnailUrl = attachments[i].icon;
+					}
+					result += '<div class="file-thumb"><img width="80" height="80" src="'+ thumbnailUrl +'"/></div>';
+					result += '<p><span class="file-name">'+attachments[i].filename+'</span><span class="file-type">'+attachments[i].mime +'</span><span class="wck-remove-upload">Remove</span></p></div>';
 					
 					/* if multiple upload false remove previous upload details */
 					if( uploadButton.data( 'multiple_upload' ) == false ){						
