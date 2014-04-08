@@ -6,6 +6,7 @@ function wckInitTinyMCE( element ){
 		editor_selector : element,
 		add_form_submit_trigger : false,
 		width: "100%",
+		convert_urls: false,
 
 		// Theme options
 		theme_advanced_buttons1:"bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink",

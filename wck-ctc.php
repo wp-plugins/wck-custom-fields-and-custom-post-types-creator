@@ -27,7 +27,7 @@ function wck_ctc_create_box(){
 		$post_type_names = array(); 
 		if( !empty( $post_types ) ){
 			foreach ( $post_types  as $post_type ) {
-				if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' ) 
+				if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' && $post_type->name != 'wck-swift-template' ) 
 					$post_type_names[] = $post_type->name;
 			}
 		}
@@ -56,7 +56,8 @@ function wck_ctc_create_box(){
 			
 			array( 'type' => 'select', 'title' => __( 'Public', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Meta argument used to define default values for publicly_queriable, show_ui, show_in_nav_menus and exclude_from_search', 'wck' ) ),
 			array( 'type' => 'select', 'title' => __( 'Show UI', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to generate a default UI for managing this post type.', 'wck' ) ),
-			array( 'type' => 'select', 'title' => __( 'Show Tagcloud', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to allow the Tag Cloud widget to use this taxonomy.', 'wck' ) )
+			array( 'type' => 'select', 'title' => __( 'Show Tagcloud', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to allow the Tag Cloud widget to use this taxonomy.', 'wck' ) ),
+			array( 'type' => 'select', 'title' => __( 'Show Admin Column', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether to allow automatic creation of taxonomy columns on associated post-types.', 'wck' ) )
 		);
 
 		$args = array(
@@ -103,8 +104,12 @@ function wck_ctc_create_taxonomy(){
 				'public' => $ct['public'] == 'false' ? false : true,								
 				'show_ui' => $ct['show-ui'] == 'false' ? false : true, 								
 				'hierarchical' => $ct['hierarchical'] == 'false' ? false : true,
-				'show_tagcloud' => $ct['show-tagcloud'] == 'false' ? false : true
-			);
+				'show_tagcloud' => $ct['show-tagcloud'] == 'false' ? false : true				
+			);			
+			
+			if( !empty( $ct['show-admin-column'] ) ){
+				$args['show_admin_column'] = $ct['show-admin-column'] == 'false' ? false : true;
+			}
 
 			if( !empty( $ct['attach-to'] ) )
 				$object_type = explode( ', ', $ct['attach-to'] );
@@ -149,7 +154,7 @@ function wck_ctc_form_wrapper_start(){
 	echo '<li id="ctc-advanced-options-container" style="display:none;"><ul>';
 }
 
-add_action( "wck_after_add_form_wck_ctc_element_20", 'wck_ctc_form_wrapper_end' );
+add_action( "wck_after_add_form_wck_ctc_element_21", 'wck_ctc_form_wrapper_end' );
 function wck_ctc_form_wrapper_end(){
 	echo '</ul></li>';	
 }
@@ -176,7 +181,7 @@ function wck_ctc_update_form_wrapper_start( $form, $i ){
 	return $form;
 }
 
-add_filter( "wck_after_update_form_wck_ctc_element_20", 'wck_ctc_update_form_wrapper_end', 10, 2 );
+add_filter( "wck_after_update_form_wck_ctc_element_21", 'wck_ctc_update_form_wrapper_end', 10, 2 );
 function wck_ctc_update_form_wrapper_end( $form, $i ){
 	$form .=  '</ul></li>';	
 	return $form;
@@ -205,7 +210,7 @@ function wck_ctc_display_adv_wrapper_start( $form, $i ){
 	return $form;
 }
 
-add_filter( "wck_after_listed_wck_ctc_element_20", 'wck_ctc_display_adv_wrapper_end', 10, 2 );
+add_filter( "wck_after_listed_wck_ctc_element_21", 'wck_ctc_display_adv_wrapper_end', 10, 2 );
 function wck_ctc_display_adv_wrapper_end( $form, $i ){
 	$form .=  '</ul></li>';	
 	return $form;
@@ -218,7 +223,7 @@ function wck_ctc_add_side_boxes(){
 }
 function wck_ctc_side_box_one(){
 	?>
-		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>" width="260" height="385" alt="WCK-PRO"/></a>
+		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>?v=1" width="260" height="385" alt="WCK-PRO"/></a>
 	<?php
 }
 
