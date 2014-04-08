@@ -89,8 +89,9 @@ function wck_cfc_create_box(){
 	global $wpdb;
 	
 	/* get post types */
+	$public_cpt_arg = apply_filters( 'wck_cfc_public_cpt_arg', true );
 	$args = array(
-			'public'   => true
+			'public'   => $public_cpt_arg
 		);
 	$output = 'objects'; // or objects
 	$post_types = get_post_types($args,$output);
@@ -99,6 +100,16 @@ function wck_cfc_create_box(){
 		foreach ($post_types  as $post_type ) {
 			if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' && $post_type->name != 'wck-swift-template' ) 
 				$post_type_names[] = $post_type->name;
+		}
+	}
+	/* add CPTC registered with WCK that are not public */
+	if( $public_cpt_arg ){
+		$cpts = get_option('wck_cptc');
+		if( !empty( $cpts ) ){
+			foreach( $cpts as $cpt ){
+				if( $cpt['public'] == 'false' )
+					$post_type_names[] = $cpt['post-type'];
+			}
 		}
 	}
 	
@@ -142,7 +153,7 @@ function wck_cfc_create_box(){
 	$field_types = apply_filters( 'wck_field_types', $field_types );
 	
 	/* setup post types */
-	$post_types = get_post_types( '', 'names' ); 
+	$post_types = get_post_types( array( 'public'   => true ), 'names' ); 
 	
 	/* set up the fields array */
 	$cfc_box_fields_fields = apply_filters( 'wck_cfc_box_fields_fields', array( 
@@ -151,9 +162,9 @@ function wck_cfc_create_box(){
 		array( 'type' => 'textarea', 'title' => __( 'Description', 'wck' ), 'description' => 'The description of the field.' ),				
 		array( 'type' => 'select', 'title' => __( 'Required', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether the field is required or not', 'wck' ) ),
 		array( 'type' => 'select', 'title' => __( 'CPT', 'wck' ), 'options' => $post_types, 'default' => 'post', 'description' => __( 'Select what custom post type should be used in the CPT Select.', 'wck' ) ),
-		array( 'type' => 'text', 'title' => __( 'Default Value', 'wck' ), 'description' => __( 'Default value of the field. For Checkboxes if there are multiple values separate them with a ","', 'wck' ) ),
+		array( 'type' => 'text', 'title' => __( 'Default Value', 'wck' ), 'description' => __( 'Default value of the field. For Checkboxes if there are multiple values separate them with a ",". For an Upload field input an attachment id.', 'wck' ) ),
 		array( 'type' => 'text', 'title' => __( 'Options', 'wck' ), 'description' => __( 'Options for field types "select", "checkbox" and "radio". For multiple options separate them with a ",". You can use the following structure if you want the label to be different from the value: %LabelOne%valueone,%LabelTwo%valuetwo,%LabelThree%valuethree', 'wck' ) ),
-		array( 'type' => 'radio', 'title' => __( 'Attach upload to post', 'wck' ), 'description' => __( 'Whether or not the uploads should be attached to the post', 'wck' ), 'options' => array( 'yes', 'no' ) )
+		array( 'type' => 'checkbox', 'title' => __( 'Attach upload to post', 'wck' ), 'description' => __( 'Uploads will be attached to the post if this is checked', 'wck' ), 'options' => array( 'yes' ), 'default' => 'yes' )
 	) );	
 	
 	
@@ -239,7 +250,7 @@ function wck_cfc_create_boxes_args(){
 						$fields_inner_array['required'] = $wck_cfc_field['required'] == 'false' ? false : true;
 					if ( !empty( $wck_cfc_field['cpt'] ) )
 						$fields_inner_array['cpt'] = $wck_cfc_field['cpt']; 
-					if( !empty( $wck_cfc_field['default-value'] ) )
+					if( isset( $wck_cfc_field['default-value'] ) )
 						$fields_inner_array['default'] = $wck_cfc_field['default-value'];
 					if( !empty( $wck_cfc_field['options'] ) ){
 						$fields_inner_array['options'] = explode( ',', $wck_cfc_field['options'] );
@@ -263,8 +274,8 @@ function wck_cfc_create_boxes_args(){
 				
 					/* metabox_id must be different from meta_name */
 					$metabox_id = Wordpress_Creation_Kit::wck_generate_slug( $box_title );				
-					if( $wck_cfc_arg['meta-name'] == $metabox_id )
-						$metabox_id = 'wck-'. $metabox_id;
+					if( $wck_cfc_arg['meta-name'] == $metabox_id || 'content' == $metabox_id )
+						$metabox_id = 'wck-'. $metabox_id;						
 					
 					$box_args = array(
 									'metabox_id' => $metabox_id,
@@ -332,8 +343,13 @@ function wck_cfc_ceck_meta_name( $bool, $value, $post_id ){
 		$contains_spaces = false;
 	else 
 		$contains_spaces = true;
+		
+	if( trim( strtolower( $value ) ) !== 'content' && trim( strtolower( $value ) ) !== 'action' )
+		$restricted_name = false;
+	else 
+		$restricted_name = true;
 	
-	return ( $check_meta_existance || empty($value) || $contains_spaces );
+	return ( $check_meta_existance || empty($value) || $contains_spaces || $restricted_name );
 }
 
 add_filter( 'wck_required_message_wck_cfc_args_meta-name', 'wck_cfc_change_meta_message', 10, 2 );
@@ -342,8 +358,30 @@ function wck_cfc_change_meta_message( $message, $value ){
 		return $message;
 	else if( strpos( $value, ' ' ) !== false )
 		return __( "Choose a different Meta Name as this one contains spaces\n", "wck" );
+	else if( trim( strtolower( $value ) ) === 'content' || trim( strtolower( $value ) ) === 'action' )
+		return __( "Choose a different Meta Name as this one is reserved\n", "wck" );	
 	else
 		return __( "Choose a different Meta Name as this one already exists\n", "wck" );
+}
+
+/* Field Name Verification */
+add_filter( 'wck_required_test_wck_cfc_fields_field-title', 'wck_cfc_ceck_field_title', 10, 3 );
+function wck_cfc_ceck_field_title( $bool, $value, $post_id ){	
+		
+	if( trim( strtolower( $value ) ) !== 'content' && trim( strtolower( $value ) ) !== 'action' )
+		$restricted_name = false;
+	else 
+		$restricted_name = true;
+	
+	return ( empty($value) || $restricted_name );
+}
+
+add_filter( 'wck_required_message_wck_cfc_fields_field-title', 'wck_cfc_change_field_title_message', 10, 2 );
+function wck_cfc_change_field_title_message( $message, $value ){
+	if( empty( $value ) )
+		return $message;	
+	else if( trim( strtolower( $value ) ) === 'content' || trim( strtolower( $value ) ) === 'action' )
+		return __( "Choose a different Field Title as this one is reserved\n", "wck" );	
 }
 
 /* Add the separate meta for post type, post id and page template */

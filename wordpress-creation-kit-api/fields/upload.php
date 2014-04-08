@@ -4,52 +4,57 @@
  * @param string $value Contains input value;
  * @param string $context Context where the function is used. Depending on it some actions are preformed.;
  * @return string $element input element html string. */
+
  
 /* define id's for input and info div */
 $upload_input_id = str_replace( '-', '_', Wordpress_Creation_Kit::wck_generate_slug( $meta . $details['title'] ) );
-$upload_info_div_id = str_replace( '-', '_', Wordpress_Creation_Kit::wck_generate_slug( $meta .'_info_container_'. $details['title'] ) );
-
+$upload_info_div_id = str_replace( '-', '_', Wordpress_Creation_Kit::wck_generate_slug( $meta .'_info_container_'. $details['title'] ) ); 
+ 
 /* hidden input that will hold the attachment id */
-$element .= '<input id="'. esc_attr( $upload_input_id ) .'" type="hidden" size="36" name="'. esc_attr( Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) .'" value="'. $value .'" class="mb-text-input mb-field"/>';
+$element.= '<input id="'. esc_attr( $upload_input_id ) .'" type="hidden" size="36" name="'. esc_attr( Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) .'" value="'. $value .'" class="mb-text-input mb-field"/>';
 
-$thumbnail = '';
-$file_name = '';
-$file_type = '';
 /* container for the image preview (or file ico) and name and file type */
 if( !empty ( $value ) ){
-	$file_src = wp_get_attachment_url($value);
-	$thumbnail = wp_get_attachment_image( $value, array( 80, 60 ), true );
-	$file_name = get_the_title( $value );
-	
-	if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $value ), $matches ) )
-		$file_type = esc_html( strtoupper( $matches[1] ) );
-	else
-		$file_type = strtoupper( str_replace( 'image/', '', get_post_mime_type( $value ) ) );
+	/* it can hold multiple attachments separated by comma */
+	$values = explode( ',', $value );
+	foreach( $values as $value ){
+		$file_src = wp_get_attachment_url($value);
+		$thumbnail = wp_get_attachment_image( $value, array( 80, 80 ), true );
+		$file_name = get_the_title( $value );			
+		$file_type = get_post_mime_type( $value );		
+		
+		$element.= '<div id="'.esc_attr( $upload_info_div_id ).'_info_container" class="upload-field-details" data-attachment_id="'. $value .'">';			
+		$element.= '<div class="file-thumb">';		
+			$element.= $thumbnail;		
+		$element.= '</div>';			
+		
+		$element.= '<p><span class="file-name">';			
+			$element.= $file_name;
+		$element.= '</span><span class="file-type">';			
+			$element.= $file_type;
+		$element.= '</span>';
+		if( !empty ( $value ) )
+			$element.= '<span class="wck-remove-upload">'.__( 'Remove', 'core' ).'</span>';
+		$element.= '</p></div>';
+	}
 }
-$element .= '<div id="'. esc_attr( $upload_info_div_id ) .'" class="upload-field-details">'. $thumbnail .'<p><span class="file-name">'. $file_name .'</span><span class="file-type">'. $file_type . '</span>';
-if( !empty ( $value ) )
-	$element .= '<span class="wck-remove-upload">'.__( 'Remove', 'wck' ).'</span>';
-$element .= '</p></div>';
-/* the upload link. we send through get the hidden input id, details div id and meta name */
-if( !empty( $details['attach_to_post'] ) ){
-	$attach_to_post = 'post_id='. $post_id .'&amp;';
-}else {
-	$attach_to_post = '';
-}
-if( empty( $var_prefix ) )
-	$var_prefix = '';
-if( empty( $edit_class ) )	
-	$edit_class = '';
-	
-$media_upload_url = 'media-upload.php?'.$attach_to_post.'type=file&amp;mb_type='. $var_prefix  . esc_js(strtolower( $upload_input_id ) ).'&amp;mb_info_div='.$var_prefix  . esc_js(strtolower( $upload_info_div_id ) ).'&amp;meta_name='.$meta.'&amp;TB_iframe=1';			
 
-$media_upload_url = admin_url( $media_upload_url );
-	
-$element .= '<a id="upload_'. esc_attr(Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) .'_button" class="button" onclick="tb_show(\'\', \''.$media_upload_url.'\');">'. __( 'Upload ', 'wck' ) . $details['title'] .' </a>';
+$element.= '<a href="#" class="button wck_upload_button" id="upload_'. esc_attr(Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) .'_button" data-uploader_title="'. $details['title'] .'" data-uploader_button_text="Select Files" data-upload_input="'.esc_attr( $upload_input_id ).'" ';
+if( is_user_logged_in() )
+	$element.= 'data-uploader_logged_in="true"';
 
-/* add js global var for the hidden input, and info container div */
-$element .= '<script type="text/javascript">';				
-	$element .= 'window.'. $var_prefix . strtolower( $upload_input_id ) .' = jQuery(\''.$edit_class.'#'. $upload_input_id.'\');';
-	$element .= 'window.'. $var_prefix . strtolower( $upload_info_div_id ) .' = jQuery(\''.$edit_class.'#'. $upload_info_div_id.'\');';
-$element .= '</script>';
+if( $details['multiple_upload'] == 'true' )
+	$element.= ' data-multiple_upload="true"';
+else	
+	$element.= ' data-multiple_upload="false"';
+	
+if( $context != 'fep' )
+	$element.= ' data-upload_in_backend="true"';
+else	
+	$element.= ' data-upload_in_backend="false"';
+
+if( !empty( $details['allowed_types'] ) )
+	$element.= ' data-allowed_types="'. $details['allowed_types'] .'"';
+	
+$element.= '>'. __( 'Upload ', 'wck' ) . $details['title'] .'</a>';
 ?>

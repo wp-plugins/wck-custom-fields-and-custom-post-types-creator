@@ -91,7 +91,7 @@ class WCK_Template_API{
 		$args = array( 
 			'post_type' 		=> 'wck-meta-box',
 			'posts_per_page' 	=> -1,
-			'post_status'    	=> 'all',
+			'post_status'    	=> array( 'publish' ),
 			'fields'        	=> 'ids',
 		);
 		$all_cfc = get_posts( $args );
