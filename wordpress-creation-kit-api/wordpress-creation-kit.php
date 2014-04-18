@@ -590,13 +590,15 @@ class Wordpress_Creation_Kit{
 		wp_enqueue_script('wordpress-creation-kit', plugins_url('/wordpress-creation-kit.js', __FILE__), array('jquery', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable' ) );
 		wp_register_style('wordpress-creation-kit-css', plugins_url('/wordpress-creation-kit.css', __FILE__));
 		wp_enqueue_style('wordpress-creation-kit-css');
-
-		// wysiwyg		
-		wp_register_script( 'wck-tinymce', plugins_url( '/assets/js/tiny_mce/tiny_mce.js', __FILE__ ), array(), '1.0', true );
-		wp_enqueue_script( 'wck-tinymce' );		
-		wp_register_script( 'wck-tinymce-init', plugins_url( '/assets/js/tiny_mce/wck_tiny_mce_init.js', __FILE__ ), array(), '1.0', true );
-		wp_enqueue_script( 'wck-tinymce-init' );
-						
+		
+		// wysiwyg				
+		wp_register_script( 'wck-ckeditor', plugins_url( '/assets/js/ckeditor/ckeditor.js', __FILE__ ), array(), '1.0', true );
+		wp_enqueue_script( 'wck-ckeditor' );			
+		
+		//datepicker
+		wp_enqueue_script('jquery-ui-datepicker');		
+		wp_enqueue_style( 'jquery-style', plugins_url( '/assets/datepicker/datepicker.css', __FILE__ ) );
+		
 		/* media upload */
 		wp_enqueue_media();
 		wp_enqueue_script('wck-upload-field', plugins_url('/fields/upload.js', __FILE__), array('jquery') );
