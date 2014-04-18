@@ -23,9 +23,11 @@ jQuery(function(){
 /* add reccord to the meta */
 function addMeta(value, id, nonce){
 
-	/* if tinyMCE then trigger save. save puts the content in the hidden textarea */
-	if( tinyMCE !== undefined )
-		tinyMCE.triggerSave();
+	/* if CKEDITOR then trigger save. save puts the content in the hidden textarea */
+	if( CKEDITOR !== undefined ){
+		for ( instance in CKEDITOR.instances )
+			CKEDITOR.instances[instance].updateElement();
+	}
 
 	jQuery('#'+value).parent().css({'opacity':'0.4', 'position':'relative'}).append('<div id="mb-ajax-loading"></div>');
 	/*object to hold the values */
@@ -67,8 +69,8 @@ function addMeta(value, id, nonce){
 				jQuery('#'+value).parent().css('opacity','1');
 				jQuery('#mb-ajax-loading').remove();
 				
-				jQuery.each( response.errorfields, function (index, value) {
-					jQuery( '#'+value+' .field-label[for="' + value + '"]' ).addClass('error');
+				jQuery.each( response.errorfields, function (index, field) {
+					jQuery( '#'+value+' .field-label[for="' + field + '"]' ).addClass('error');
 				});				
 
 				alert( response.error );
@@ -179,7 +181,7 @@ function removeMeta(value, id, element_id, nonce){
 */
 
 /* reorder elements through drag and drop */
-function mb_sortable_elements() {		
+function mb_sortable_elements() {				
 		jQuery( ".mb-table-container tbody" ).not( jQuery( ".mb-table-container.single tbody, .mb-table-container.not-sortable tbody" ) ).sortable({
 			update: function(event, ui){
 				
@@ -282,9 +284,11 @@ function removeUpdateForm( id ){
 /* update reccord */
 function updateMeta(value, id, element_id, nonce){
 	
-	/* if tinyMCE then trigger save. save puts the content in the hidden textarea */
-	if( tinyMCE !== undefined )
-		tinyMCE.triggerSave();
+	/* if CKEDITOR then trigger save. save puts the content in the hidden textarea */
+	if( CKEDITOR !== undefined ){
+		for ( instance in CKEDITOR.instances )
+			CKEDITOR.instances[instance].updateElement();
+	}
 
 	jQuery('#container_'+value).parent().css({'opacity':'0.4', 'position':'relative'}).append('<div id="mb-ajax-loading"></div>');
 	var values = {};	
@@ -326,8 +330,8 @@ function updateMeta(value, id, element_id, nonce){
 				jQuery('#container_'+value).parent().css('opacity','1');
 				jQuery('#mb-ajax-loading').remove();
 				
-				jQuery.each( response.errorfields, function (index, value) {
-					jQuery( '#update_container_'+value+'_'+element_id + ' .field-label[for="' + value + '"]' ).addClass('error');
+				jQuery.each( response.errorfields, function (index, field) {
+					jQuery( '#update_container_'+value+'_'+element_id + ' .field-label[for="' + field + '"]' ).addClass('error');
 				});				
 
 				alert( response.error );

@@ -263,7 +263,7 @@ function wck_cptc_add_side_boxes(){
 }
 function wck_cptc_side_box_one(){
 	?>
-		<a href="http://www.cozmoslabs.com/wordpress-creation-kit/"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>" width="260" height="385" alt="WCK-PRO"/></a>
+		<a href="http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/?utm_source=wpbackend&utm_medium=clientsite&utm_campaign=WCKFree"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>?v=1" width="260" height="385" alt="WCK-PRO"/></a>
 	<?php
 }
 

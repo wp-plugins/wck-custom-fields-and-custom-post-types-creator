@@ -1,7 +1,6 @@
 .wck-post-box{
 	visibility:hidden;
 	height:0;
-	overflow:auto;
 }
 
 .mb-list-entry-fields li{
@@ -197,7 +196,7 @@ td.wck-number{
 }
 
 /* wysiwyg */
-.mb-right-column .wp_themeSkin table.mceLayout{
+.mb-right-column .wp_themeSkin table.mceLayout, .mb-right-column > .mce-container{
 	border-color: #CCCCCC #CCCCCC #DFDFDF;
     border-style: solid;
     border-top-left-radius: 3px;
@@ -219,4 +218,33 @@ td.wck-number{
 
 .mb-table-container li[data-type="nested-repeater"]{
 	display:none;
+}
+
+.wck_page_cptc-page #contextual-help-link-wrap, .wck_page_ctc-page #contextual-help-link-wrap, .wck_page_cfc-page #contextual-help-link-wrap, .wck_page_fep-page #contextual-help-link-wrap, .wck_page_opc-page #contextual-help-link-wrap{	
+	background: rgb(248,79,79); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(248,79,79,1) 0%, rgba(210,11,11,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(248,79,79,1)), color-stop(100%,rgba(210,11,11,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(248,79,79,1) 0%,rgba(210,11,11,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(248,79,79,1) 0%,rgba(210,11,11,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(248,79,79,1) 0%,rgba(210,11,11,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(248,79,79,1) 0%,rgba(210,11,11,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f84f4f', endColorstr='#d20b0b',GradientType=0 ); /* IE6-9 */
+}
+
+.wck_page_cptc-page #contextual-help-link-wrap #contextual-help-link, .wck_page_ctc-page #contextual-help-link-wrap #contextual-help-link, .wck_page_cfc-page #contextual-help-link-wrap #contextual-help-link, .wck_page_fep-page #contextual-help-link-wrap #contextual-help-link, .wck_page_opc-page #contextual-help-link-wrap #contextual-help-link{
+	padding-left:55px;
+	color: #FFFFFF;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+.wck_page_cptc-page #contextual-help-link-wrap #contextual-help-link:before, .wck_page_ctc-page #contextual-help-link-wrap #contextual-help-link:before, .wck_page_cfc-page #contextual-help-link-wrap #contextual-help-link:before, .wck_page_fep-page #contextual-help-link-wrap #contextual-help-link:before, .wck_page_opc-page #contextual-help-link-wrap #contextual-help-link:before{
+	content:"WCK";
+	width:15px;
+	height:20px;	
+	background:url( ../images/wck-icon-dark.png ) no-repeat 0 0;
+	position:absolute;
+	top:4px;
+	left:4px;
+	line-height: 16px;
+	padding-left: 18px;
 }

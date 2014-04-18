@@ -16,6 +16,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 if( file_exists( dirname(__FILE__). '/wck-fep/wck-fep.php' ) )
 	require_once( 'wck-fep/wck-fep.php' );
 
+if( file_exists( dirname(__FILE__). '/wck-static-metabox-api.php' ) )
+	require_once( 'wck-static-metabox-api.php' );
+	
+	
 /* 
 
 Usage Example 1:
@@ -70,6 +74,7 @@ class Wordpress_Creation_Kit{
 
 		/* Global that will hold all the arguments for all the custom boxes */
 		global $wck_objects;
+		global $wck_did_actions;
 		
 		/* Merge the input arguments and the defaults. */
 		$this->args = wp_parse_args( $args, $this->defaults );
@@ -80,7 +85,9 @@ class Wordpress_Creation_Kit{
 		/*print scripts*/
 		add_action('admin_enqueue_scripts', array( &$this, 'wck_print_scripts' ));	
 		/* add our own ajaxurl because we are going to use the wck script also in frontend and we want to avoid any conflicts */
-		add_action( 'admin_head', array( &$this, 'wck_print_ajax_url' ) );
+		if( !$wck_did_actions ){
+			add_action( 'admin_head', array( &$this, 'wck_print_ajax_url' ), 10 );		
+		}
 		
 		// Set up the AJAX hooks
 		add_action("wp_ajax_wck_add_meta".$this->args['meta_name'], array( &$this, 'wck_add_meta') );
@@ -90,22 +97,18 @@ class Wordpress_Creation_Kit{
 		add_action("wp_ajax_wck_refresh_entry".$this->args['meta_name'], array( &$this, 'wck_refresh_entry') );
 		add_action("wp_ajax_wck_add_form".$this->args['meta_name'], array( &$this, 'wck_add_form') );
 		add_action("wp_ajax_wck_remove_meta".$this->args['meta_name'], array( &$this, 'wck_remove_meta') );
-		add_action("wp_ajax_wck_reorder_meta".$this->args['meta_name'], array( &$this, 'wck_reorder_meta') );
-		
-		/* modify Insert into post button */
-		add_action('admin_head-media-upload-popup', array( &$this, 'wck_media_upload_popup_head') );
-		
-		/* custom functionality for upload video */
-		add_filter('media_send_to_editor', array( &$this, 'wck_media_send_to_editor' ), 15, 2 );
-				
+		add_action("wp_ajax_wck_reorder_meta".$this->args['meta_name'], array( &$this, 'wck_reorder_meta') );		
+						
 		add_action('add_meta_boxes', array( &$this, 'wck_add_metabox') );	
 		
 		/* hook to add a side metabox with the Syncronize translation button */
 		add_action('add_meta_boxes', array( &$this, 'wck_add_sync_translation_metabox' ) );
 		
 		/* ajax hook the syncronization function */
-		add_action("wp_ajax_wck_sync_translation", array( &$this, 'wck_sync_translation_ajax' ) );		
+		add_action("wp_ajax_wck_sync_translation", array( &$this, 'wck_sync_translation_ajax' ) );
 		
+		/* eache metabox executes the actions so this marks when they were executed at least once */
+		$wck_did_actions = true;
 	}
 	
 	
@@ -208,10 +211,11 @@ class Wordpress_Creation_Kit{
 	 * @param array $details Contains the details for the field.	 
 	 * @param string $value Contains input value;
 	 * @param string $context Context where the function is used. Depending on it some actions are preformed.;
+	 * @param int $post_id The post ID;
 	 * @return string $element input element html string.
 	 */
 	 
-	function wck_output_form_field( $meta, $details, $value = '', $context = '' ){
+	function wck_output_form_field( $meta, $details, $value = '', $context = '', $post_id = '' ){
 		$element = '';
 		
 		if( $context == 'edit_form' ){
@@ -223,10 +227,9 @@ class Wordpress_Creation_Kit{
 			$frontend_prefix = 'fep-';
 		}
 		else{
-			if( !empty( $details['default'] ) )
+			if( isset( $details['default'] ) )
 				$value = apply_filters( "wck_default_value_{$meta}_". Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) , $details['default'] );
-		}
-		
+		}		
 		
 		$element .= '<label for="'. esc_attr( Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) .'" class="field-label">'. apply_filters( "wck_label_{$meta}_". Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ), ucfirst($details['title']) ) .':';
 		if( !empty( $details['required'] ) && $details['required'] )
@@ -258,6 +261,8 @@ class Wordpress_Creation_Kit{
 		
 		$element .= '</div><!-- .mb-right-column -->';
 		
+		$element = apply_filters( "wck_output_form_field_{$meta}_" . Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ), $element ); 
+		
 		return $element;
 				
 	}
@@ -275,7 +280,7 @@ class Wordpress_Creation_Kit{
 	 * the meta to apear in custom fields box.
 	 * @param object $post Post object
 	 */
-	function create_add_form($fields, $meta, $post){
+	function create_add_form($fields, $meta, $post, $context = ''){
 		$nonce = wp_create_nonce( 'wck-add-meta' );
 		if( !empty( $post->ID ) )
 			$post_id = $post->ID;
@@ -294,7 +299,7 @@ class Wordpress_Creation_Kit{
 						
 						?>
 							<li class="row-<?php echo esc_attr( Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) ?>">
-								<?php echo self::wck_output_form_field( $meta, $details ); ?>
+								<?php echo self::wck_output_form_field( $meta, $details, '', $context, $post_id ); ?>
 							</li>
 						<?php
 						
@@ -345,7 +350,7 @@ class Wordpress_Creation_Kit{
 			if( !empty( $fields ) ){
 				foreach( $fields as $field ){				
 					$details = $field;
-					if( !empty( $results[$element_id][Wordpress_Creation_Kit::wck_generate_slug( $details['title'] )] ) )
+					if( isset( $results[$element_id][Wordpress_Creation_Kit::wck_generate_slug( $details['title'] )] ) )
 						$value = $results[$element_id][Wordpress_Creation_Kit::wck_generate_slug( $details['title'] )];
 					else 
 						$value = '';
@@ -354,7 +359,7 @@ class Wordpress_Creation_Kit{
 					
 					$form .= '<li class="row-'. esc_attr( Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) .'">';
 					
-					$form .= self::wck_output_form_field( $meta, $details, $value, 'edit_form' ); 
+					$form .= self::wck_output_form_field( $meta, $details, $value, 'edit_form', $id ); 
 					
 					$form .= '</li>';
 					
@@ -385,14 +390,18 @@ class Wordpress_Creation_Kit{
 	 * the meta to apear in custom fields box.
 	 * @param int $id Post id
 	 */
-	function wck_output_meta_content($meta, $id, $fields){		
+	function wck_output_meta_content($meta, $id, $fields, $box_args = '' ){	
+		/* in fep $this->args is empty so we need it as a parameter */
+		if( !empty( $box_args ) )			
+			$this->args = wp_parse_args( $box_args, $this->defaults );
+		
 		
 		if( $this->args['context'] == 'post_meta' || $this->args['context'] == '' )
 			$results = get_post_meta($id, $meta, true);
 		else if ( $this->args['context'] == 'option' )
 			$results = get_option( $meta );
 		
-		$list = '';
+		$list = '';	
 		$list .= '<table id="container_'.esc_attr($meta).'" class="mb-table-container widefat';
 		
 		if( $this->args['single'] ) $list .= ' single';
@@ -436,17 +445,17 @@ class Wordpress_Creation_Kit{
 			foreach( $fields as $field ){
 				$details = $field;
 				
-				if( !empty( $results[$element_id][Wordpress_Creation_Kit::wck_generate_slug( $details['title'] )] ) )
+				if( isset( $results[$element_id][Wordpress_Creation_Kit::wck_generate_slug( $details['title'] )] ) )
 					$value = $results[$element_id][Wordpress_Creation_Kit::wck_generate_slug( $details['title'] )];
 				else
-					$value ='';
+					$value = '';
 					
 				/* filter display value */			
 				$value = apply_filters( "wck_displayed_value_{$meta}_element_{$j}", $value );
 				
 				/* display it differently based on field type*/
 				if( $details['type'] == 'upload' ){	
-					$display_value = self::wck_get_entry_field_avatar($value);
+					$display_value = self::wck_get_entry_field_upload($value);
 				} elseif ( $details['type'] == 'user select' ) {
 					$display_value = self::wck_get_entry_field_user_select( $value ) . '</pre>';
 				} elseif ( $details['type'] == 'cpt select' ){
@@ -496,8 +505,8 @@ class Wordpress_Creation_Kit{
 		return $list;
 	}
 
-	/* function to generate output for avatar */
-	function wck_get_entry_field_avatar($id){
+	/* function to generate output for upload field */
+	function wck_get_entry_field_upload($id){
 		if( !empty ( $id ) && is_numeric( $id ) ){				
 			$file_src = wp_get_attachment_url($id);
 			$thumbnail = wp_get_attachment_image( $id, array( 80, 60 ), true );
@@ -531,13 +540,14 @@ class Wordpress_Creation_Kit{
 	/* function to generate output for cpt select */
 	function wck_get_entry_field_cpt_select($id){
 		if( !empty ( $id ) && is_numeric( $id ) ){				
-			$post = get_post( $id );
+			$post = get_post( $id );	 
 			
-			if ( $post->post_title == '' )
-				$post->post_title = 'No title. ID: ' . $id; 
-			
-			if ( $post ) 
+			if ( $post != null ){
+				if ( $post->post_title == '' )
+					$post->post_title = 'No title. ID: ' . $id;
+					
 				return '<pre>'.htmlspecialchars( $post->post_title );	
+			}
 			else
 				return 'Error - Post ID not found in database';
 				
@@ -563,36 +573,43 @@ class Wordpress_Creation_Kit{
 	}
 	
 	/* our own ajaxurl */
-	function wck_print_ajax_url(){
+	function wck_print_ajax_url(){		
 		echo '<script type="text/javascript">var wckAjaxurl = "'. admin_url('admin-ajax.php') .'";</script>';
+		echo '<script type="text/javascript">var metaname = "'. $this->args['meta_name'] .'";</script>';
 	}
 	
 	
 	/* Helper function for enqueueing scripts and styles */
 	private static function wck_enqueue( $context = '' ){
+		global $wck_printed_scripts;
+		
 		wp_enqueue_script( 'jquery-ui-draggable' );
 		wp_enqueue_script( 'jquery-ui-droppable' );
-		wp_enqueue_script( 'jquery-ui-sortable' );
-		
-		if( $context == 'options' ){
-			wp_enqueue_script( 'thickbox' );
-			wp_enqueue_style( 'thickbox' );
-		}
+		wp_enqueue_script( 'jquery-ui-sortable' );		
 		
 		wp_enqueue_script('wordpress-creation-kit', plugins_url('/wordpress-creation-kit.js', __FILE__), array('jquery', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable' ) );
 		wp_register_style('wordpress-creation-kit-css', plugins_url('/wordpress-creation-kit.css', __FILE__));
 		wp_enqueue_style('wordpress-creation-kit-css');
-
-		// wysiwyg		
-		wp_register_script( 'wck-tinymce', plugins_url( '/assets/js/tiny_mce/tiny_mce.js', __FILE__ ), array(), '1.0', true );
-		wp_enqueue_script( 'wck-tinymce' );		
-		wp_register_script( 'wck-tinymce-init', plugins_url( '/assets/js/tiny_mce/wck_tiny_mce_init.js', __FILE__ ), array(), '1.0', true );
-		wp_enqueue_script( 'wck-tinymce-init' );
+		
+		// wysiwyg				
+		wp_register_script( 'wck-ckeditor', plugins_url( '/assets/js/ckeditor/ckeditor.js', __FILE__ ), array(), '1.0', true );
+		wp_enqueue_script( 'wck-ckeditor' );			
 		
 		//datepicker
 		wp_enqueue_script('jquery-ui-datepicker');		
-		wp_enqueue_style('jquery-style', plugins_url( '', dirname(__FILE__) ).'/assets/datepicker/datepicker.css');
-
+		wp_enqueue_style( 'jquery-style', plugins_url( '/assets/datepicker/datepicker.css', __FILE__ ) );
+		
+		/* media upload */
+		wp_enqueue_media();
+		wp_enqueue_script('wck-upload-field', plugins_url('/fields/upload.js', __FILE__), array('jquery') );
+		if( !$wck_printed_scripts ){
+			/* send parameters to the upload script */
+			$post_id = !empty( $_GET['post'] ) ? $_GET['post'] : '';
+			$parameters_array = array( 'postID' => $post_id );
+			wp_localize_script( 'wck-upload-field', 'wckUpload', $parameters_array );
+		}
+		/* eache metabox prints the scripts which is fine for wp_enque but not for wp_localize_script so this marks when they were executed at least once */
+		$wck_printed_scripts = true;
 	}	
 
 	/* Helper function for required fields */
@@ -620,6 +637,9 @@ class Wordpress_Creation_Kit{
 			}
 		}
 		
+		$required_message .= apply_filters( "wck_extra_message", "", $fields, $required_fields, $meta, $values, $id );
+		$required_fields_with_errors = apply_filters( "wck_required_fields_with_errors", $required_fields_with_errors, $fields, $required_fields, $meta, $value, $id );
+
 		if( $required_message != '' ){			
 			$errors = array( 'error' => $required_message, 'errorfields' => $required_fields_with_errors );			
 		}
@@ -668,7 +688,7 @@ class Wordpress_Creation_Kit{
 		else if ( $this->args['context'] == 'option' )
 			update_option( $meta, $results );
 		
-		/* if unserialize_fields is true add for each entry separete post meta for every element of the form  */
+		/* if unserialize_fields is true add for each entry separate post meta for every element of the form  */
 		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){
 			
 			$meta_suffix = count( $results );
@@ -808,6 +828,9 @@ class Wordpress_Creation_Kit{
 		$element_id = $_POST['element_id'];	
 		
 		echo self::mb_update_form($this->args['meta_array'], $meta, $id, $element_id);
+		
+		do_action( 'wck_after_adding_form', $meta, $id, $element_id );
+		
 		exit;
 	}
 
@@ -931,101 +954,6 @@ class Wordpress_Creation_Kit{
 		}		
 		
 		exit;
-	}
-
-	/* modify Insert into post button */	
-	function wck_media_upload_popup_head()
-	{	
-		if( isset( $_GET["meta_name"] ) ){
-			if( $this->args['meta_name'] == $_GET["meta_name"] ){			
-				if( ( isset( $_GET["mb_type"] ) ) ){
-					?>
-					<style type="text/css">
-						#media-upload-header #sidemenu li#tab-type_url,
-						#media-upload-header #sidemenu li#tab-gallery {
-							display: none;
-						}
-						
-						#media-items tr.url,
-						#media-items tr.align,
-						#media-items tr.image_alt,
-						#media-items tr.image-size,
-						#media-items tr.post_excerpt,
-						#media-items tr.post_content,
-						#media-items tr.image_alt p,
-						#media-items table thead input.button,
-						#media-items table thead img.imgedit-wait-spin,
-						#media-items tr.submit a.wp-post-thumbnail {
-							display: none;
-						} 
-
-						.media-item table thead img {
-							border: #DFDFDF solid 1px; 
-							margin-right: 10px;
-						}
-
-					</style>
-					<script type="text/javascript">
-					(function($){
-					
-						$(document).ready(function(){
-						
-							$('#media-items').bind('DOMNodeInserted',function(){
-								$('input[value="Insert into Post"]').each(function(){
-									$(this).attr('value','<?php _e("Select File")?>');
-								});
-							}).trigger('DOMNodeInserted');
-							
-							$('form#filter').each(function(){
-								
-								$(this).append('<input type="hidden" name="mb_type" value="<?php echo $_GET['mb_type']; ?>" />');
-								$(this).append('<input type="hidden" name="mb_info_div" value="<?php echo $_GET['mb_info_div']; ?>" />');
-								
-							});
-						});
-									
-					})(jQuery);
-					</script>
-					<?php
-				}
-			}
-		}
-	}
-
-	/* custom functionality for upload button */
-
-	function wck_media_send_to_editor($html, $id)
-	{
-		parse_str($_POST["_wp_http_referer"], $arr_postinfo);
-		
-		if(isset($arr_postinfo["mb_type"]))
-		{
-			$file_src = wp_get_attachment_url($id);
-			$thumbnail = wp_get_attachment_image( $id, array( 80, 60 ), true );
-			$file_name = get_the_title( $id );
-			
-			if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $id ), $matches ) )
-				$file_type = esc_html( strtoupper( $matches[1] ) );
-			else
-				$file_type = strtoupper( str_replace( 'image/', '', get_post_mime_type( $id ) ) );
-		
-			?>
-			<script type="text/javascript">				
-				
-				self.parent.window. <?php echo $arr_postinfo["mb_type"];?> .val('<?php echo $id; ?>');
-				self.parent.window. <?php echo $arr_postinfo["mb_info_div"];?> .html('<?php echo $thumbnail ?><p><span class="file-name"><?php echo $file_name; ?></span><span class="file-type"><?php echo $file_type; ?></span><span class="wck-remove-upload"><?php _e( 'Remove', 'wck' )?></span></p>');
-				
-				self.parent.tb_remove();
-				
-			</script>
-			<?php
-			exit;
-		} 
-		else 
-		{
-			return $html;
-		}
-		
 	}
 	
 	/* WPML Compatibility */
@@ -1201,7 +1129,7 @@ class Wordpress_Creation_Kit{
 	 * @param string $string The input string from which we generate the slug	 
 	 * @return string $slug The henerated slug
 	 */
-	function wck_generate_slug( $string ){
+	static function wck_generate_slug( $string ){
 		$slug = rawurldecode( sanitize_title_with_dashes( remove_accents( $string ) ) );
 		return $slug;
 	}
