@@ -4,15 +4,24 @@ jQuery(document).ready(function(){
 	
 		// Uploading files					
 		var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
-		var set_to_post_id = wckUpload.postID; // Set this
+		
 		
 		jQuery('.wck_upload_button').live('click', function( event ){		
 			event.preventDefault();
-				
+			
+			var set_to_post_id = jQuery( this ).data( 'post_id' ); // Set this
+			
+			
 			var file_frame;
 			var uploadInputId = jQuery( this ).data( 'upload_input' );
 			var uploadInFront = jQuery( this ).data( 'upload_in_backend' );
+			var attachToPost = jQuery( this ).data( 'attach_to_post' );
 			var uploadButton = jQuery( this );
+			
+			/* remove set_to_post_id value if we do not want to attach to post */
+			if( attachToPost != true ){
+				set_to_post_id = '';
+			}			
 			
 			/* set default tab to upload file */
 			wp.media.controller.Library.prototype.defaults.contentUserSetting = false;
@@ -56,8 +65,7 @@ jQuery(document).ready(function(){
 				for( var i=0;i < attachments.length; i++ ){
 					// Do something with attachment.id and/or attachment.url here	
 					attids.push( attachments[i].id );
-					result = '<div class="upload-field-details" id="'+ uploadInputId +'_info_container" data-attachment_id="'+ attachments[i].id +'">';
-					console.log(attachments);
+					result = '<div class="upload-field-details" id="'+ uploadInputId +'_info_container" data-attachment_id="'+ attachments[i].id +'">';					
 					if( attachments[i].sizes != undefined ){
 						if( attachments[i].sizes.thumbnail != undefined )
 							thumb = attachments[i].sizes.thumbnail;

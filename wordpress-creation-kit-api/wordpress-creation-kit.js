@@ -23,9 +23,11 @@ jQuery(function(){
 /* add reccord to the meta */
 function addMeta(value, id, nonce){
 
-	/* if tinyMCE then trigger save. save puts the content in the hidden textarea */
-	if( tinyMCE !== undefined )
-		tinyMCE.triggerSave();
+	/* if CKEDITOR then trigger save. save puts the content in the hidden textarea */
+	if( CKEDITOR !== undefined ){
+		for ( instance in CKEDITOR.instances )
+			CKEDITOR.instances[instance].updateElement();
+	}
 
 	jQuery('#'+value).parent().css({'opacity':'0.4', 'position':'relative'}).append('<div id="mb-ajax-loading"></div>');
 	/*object to hold the values */
@@ -183,7 +185,7 @@ function mb_sortable_elements() {
 		jQuery( ".mb-table-container tbody" ).not( jQuery( ".mb-table-container.single tbody, .mb-table-container.not-sortable tbody" ) ).sortable({
 			update: function(event, ui){
 				
-				var value = jQuery(this).parent().prev().attr('id');
+				var value = jQuery(this).parent().siblings('.wck-add-form').attr('id');				
 				var id = jQuery(this).parent().attr('post');
 				
 				var result = jQuery(this).sortable('toArray');
@@ -282,9 +284,11 @@ function removeUpdateForm( id ){
 /* update reccord */
 function updateMeta(value, id, element_id, nonce){
 	
-	/* if tinyMCE then trigger save. save puts the content in the hidden textarea */
-	if( tinyMCE !== undefined )
-		tinyMCE.triggerSave();
+	/* if CKEDITOR then trigger save. save puts the content in the hidden textarea */
+	if( CKEDITOR !== undefined ){
+		for ( instance in CKEDITOR.instances )
+			CKEDITOR.instances[instance].updateElement();
+	}
 
 	jQuery('#container_'+value).parent().css({'opacity':'0.4', 'position':'relative'}).append('<div id="mb-ajax-loading"></div>');
 	var values = {};	

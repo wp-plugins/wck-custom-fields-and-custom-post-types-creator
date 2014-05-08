@@ -196,7 +196,7 @@ td.wck-number{
 }
 
 /* wysiwyg */
-.mb-right-column .wp_themeSkin table.mceLayout{
+.mb-right-column .wp_themeSkin table.mceLayout, .mb-right-column > .mce-container{
 	border-color: #CCCCCC #CCCCCC #DFDFDF;
     border-style: solid;
     border-top-left-radius: 3px;

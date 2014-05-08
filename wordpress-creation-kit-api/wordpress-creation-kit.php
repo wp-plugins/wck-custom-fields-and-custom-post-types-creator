@@ -91,13 +91,21 @@ class Wordpress_Creation_Kit{
 		
 		// Set up the AJAX hooks
 		add_action("wp_ajax_wck_add_meta".$this->args['meta_name'], array( &$this, 'wck_add_meta') );
+		add_action("wp_ajax_nopriv_wck_add_meta".$this->args['meta_name'], array( &$this, 'wck_add_meta') );
 		add_action("wp_ajax_wck_update_meta".$this->args['meta_name'], array( &$this, 'wck_update_meta') );
+		add_action("wp_ajax_nopriv_wck_update_meta".$this->args['meta_name'], array( &$this, 'wck_update_meta') );
 		add_action("wp_ajax_wck_show_update".$this->args['meta_name'], array( &$this, 'wck_show_update_form') );
+		add_action("wp_ajax_nopriv_wck_show_update".$this->args['meta_name'], array( &$this, 'wck_show_update_form') );
 		add_action("wp_ajax_wck_refresh_list".$this->args['meta_name'], array( &$this, 'wck_refresh_list') );
+		add_action("wp_ajax_nopriv_wck_refresh_list".$this->args['meta_name'], array( &$this, 'wck_refresh_list') );
 		add_action("wp_ajax_wck_refresh_entry".$this->args['meta_name'], array( &$this, 'wck_refresh_entry') );
+		add_action("wp_ajax_nopriv_wck_refresh_entry".$this->args['meta_name'], array( &$this, 'wck_refresh_entry') );
 		add_action("wp_ajax_wck_add_form".$this->args['meta_name'], array( &$this, 'wck_add_form') );
+		add_action("wp_ajax_nopriv_wck_add_form".$this->args['meta_name'], array( &$this, 'wck_add_form') );
 		add_action("wp_ajax_wck_remove_meta".$this->args['meta_name'], array( &$this, 'wck_remove_meta') );
+		add_action("wp_ajax_nopriv_wck_remove_meta".$this->args['meta_name'], array( &$this, 'wck_remove_meta') );
 		add_action("wp_ajax_wck_reorder_meta".$this->args['meta_name'], array( &$this, 'wck_reorder_meta') );		
+		add_action("wp_ajax_nopriv_wck_reorder_meta".$this->args['meta_name'], array( &$this, 'wck_reorder_meta') );		
 						
 		add_action('add_meta_boxes', array( &$this, 'wck_add_metabox') );	
 		
@@ -288,7 +296,7 @@ class Wordpress_Creation_Kit{
 			$post_id = '';
 		
 		?>
-		<div id="<?php echo $meta ?>" style="padding:10px 0;" <?php if( $this->args['single'] ) echo 'class="single"' ?>>
+		<div id="<?php echo $meta ?>" style="padding:10px 0;" class="wck-add-form<?php if( $this->args['single'] ) echo ' single' ?>">
 			<ul class="mb-list-entry-fields">
 				<?php
 				$element_id = 0;
@@ -450,8 +458,10 @@ class Wordpress_Creation_Kit{
 				else
 					$value = '';
 					
-				/* filter display value */			
+				/* filter display value */
+				/* keep this one for backwards compatibility */	
 				$value = apply_filters( "wck_displayed_value_{$meta}_element_{$j}", $value );
+				$value = apply_filters( "wck_displayed_value_{$meta}_".Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ), $value );
 				
 				/* display it differently based on field type*/
 				if( $details['type'] == 'upload' ){	
@@ -590,22 +600,21 @@ class Wordpress_Creation_Kit{
 		wp_enqueue_script('wordpress-creation-kit', plugins_url('/wordpress-creation-kit.js', __FILE__), array('jquery', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable' ) );
 		wp_register_style('wordpress-creation-kit-css', plugins_url('/wordpress-creation-kit.css', __FILE__));
 		wp_enqueue_style('wordpress-creation-kit-css');
-
-		// wysiwyg		
-		wp_register_script( 'wck-tinymce', plugins_url( '/assets/js/tiny_mce/tiny_mce.js', __FILE__ ), array(), '1.0', true );
-		wp_enqueue_script( 'wck-tinymce' );		
-		wp_register_script( 'wck-tinymce-init', plugins_url( '/assets/js/tiny_mce/wck_tiny_mce_init.js', __FILE__ ), array(), '1.0', true );
-		wp_enqueue_script( 'wck-tinymce-init' );
-						
+		
+		// wysiwyg				
+		wp_register_script( 'wck-ckeditor', plugins_url( '/assets/js/ckeditor/ckeditor.js', __FILE__ ), array(), '1.0', true );
+		wp_enqueue_script( 'wck-ckeditor' );			
+		
+		//datepicker
+		if ( file_exists( WCK_PLUGIN_DIR. '/wordpress-creation-kit-api/fields/datepicker.php' ) ){
+			wp_enqueue_script('jquery-ui-datepicker');		
+			wp_enqueue_style( 'jquery-style', plugins_url( '/assets/datepicker/datepicker.css', __FILE__ ) );
+		}
+		
 		/* media upload */
 		wp_enqueue_media();
 		wp_enqueue_script('wck-upload-field', plugins_url('/fields/upload.js', __FILE__), array('jquery') );
-		if( !$wck_printed_scripts ){
-			/* send parameters to the upload script */
-			$post_id = !empty( $_GET['post'] ) ? $_GET['post'] : '';
-			$parameters_array = array( 'postID' => $post_id );
-			wp_localize_script( 'wck-upload-field', 'wckUpload', $parameters_array );
-		}
+		
 		/* eache metabox prints the scripts which is fine for wp_enque but not for wp_localize_script so this marks when they were executed at least once */
 		$wck_printed_scripts = true;
 	}	

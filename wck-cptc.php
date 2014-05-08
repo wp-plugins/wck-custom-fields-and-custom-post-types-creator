@@ -153,10 +153,9 @@ function wck_cptc_create_cpts(){
 			else{
 				if( !empty( $cpt['rewrite-slug'] ) )
 					$args['rewrite'] = array('slug' => $cpt['rewrite-slug']);
-			}	
+			}		
 			
-			
-			register_post_type( $cpt['post-type'], $args );
+			register_post_type( $cpt['post-type'], apply_filters( 'wck_cptc_register_post_type_args', $args, $cpt['post-type'] ) );
 		}
 	}
 }
