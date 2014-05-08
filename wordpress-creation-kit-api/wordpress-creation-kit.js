@@ -185,7 +185,7 @@ function mb_sortable_elements() {
 		jQuery( ".mb-table-container tbody" ).not( jQuery( ".mb-table-container.single tbody, .mb-table-container.not-sortable tbody" ) ).sortable({
 			update: function(event, ui){
 				
-				var value = jQuery(this).parent().prev().attr('id');
+				var value = jQuery(this).parent().siblings('.wck-add-form').attr('id');				
 				var id = jQuery(this).parent().attr('post');
 				
 				var result = jQuery(this).sortable('toArray');

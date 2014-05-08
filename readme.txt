@@ -6,7 +6,7 @@ Tags: custom fields, custom field, wordpress custom fields, advanced custom fiel
 
 Requires at least: 3.1
 Tested up to: 3.9.0
-Stable tag: 1.0.9
+Stable tag: 1.1.0
 
 A must have tool for creating custom fields, custom post types and taxonomies, fast and without any programming knowledge.
 
@@ -141,6 +141,12 @@ Creating a taxonomy generally automatically creates a special query variable usi
 10. Taxonomy listing
 
 == Changelog ==
+= 1.1.0 =
+* Added filter for the arguments passed to the register_post_type() funtion when creating a Custom Post Type. ( "wck_cptc_register_post_type_args" )
+* Fixed the missing datepicker css 404 error. 
+* Removed notices  
+* Fixed "Attach upload to post" option for the upload field.
+
 = 1.0.9 =
 * Replaced wysiwyg editor from tinymce to ckeditor to fix compatibility issues with WordPress 3.9
 
