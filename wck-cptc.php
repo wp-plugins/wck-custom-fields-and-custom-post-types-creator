@@ -122,7 +122,6 @@ function wck_cptc_create_cpts(){
 				'labels' => $labels,
 				'public' => $cpt['public'] == 'false' ? false : true,
 				'description'	=> $cpt['description'],
-				'publicly_queryable' => true,
 				'show_ui' => $cpt['show-ui'] == 'false' ? false : true,
 				'show_in_nav_menus' => !empty( $cpt['show-in-nav-menus'] ) && $cpt['show-in-nav-menus'] == 'false' ? false : true,	
 				'has_archive' => $cpt['has-archive'] == 'false' ? false : true,
@@ -153,10 +152,9 @@ function wck_cptc_create_cpts(){
 			else{
 				if( !empty( $cpt['rewrite-slug'] ) )
 					$args['rewrite'] = array('slug' => $cpt['rewrite-slug']);
-			}	
+			}		
 			
-			
-			register_post_type( $cpt['post-type'], $args );
+			register_post_type( $cpt['post-type'], apply_filters( 'wck_cptc_register_post_type_args', $args, $cpt['post-type'] ) );
 		}
 	}
 }

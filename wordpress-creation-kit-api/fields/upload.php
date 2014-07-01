@@ -5,7 +5,6 @@
  * @param string $context Context where the function is used. Depending on it some actions are preformed.;
  * @return string $element input element html string. */
 
- 
 /* define id's for input and info div */
 $upload_input_id = str_replace( '-', '_', Wordpress_Creation_Kit::wck_generate_slug( $meta . $details['title'] ) );
 $upload_info_div_id = str_replace( '-', '_', Wordpress_Creation_Kit::wck_generate_slug( $meta .'_info_container_'. $details['title'] ) ); 
@@ -42,11 +41,21 @@ if( !empty ( $value ) ){
 $element.= '<a href="#" class="button wck_upload_button" id="upload_'. esc_attr(Wordpress_Creation_Kit::wck_generate_slug( $details['title'] ) ) .'_button" data-uploader_title="'. $details['title'] .'" data-uploader_button_text="Select Files" data-upload_input="'.esc_attr( $upload_input_id ).'" ';
 if( is_user_logged_in() )
 	$element.= 'data-uploader_logged_in="true"';
+	
+if( !empty( $post_id ) )
+	$element.= ' data-post_id="'. $post_id .'"';
+	
+if( !empty( $details['multiple_upload'] ) ){
+	if( $details['multiple_upload'] == 'true' )
+		$element.= ' data-multiple_upload="true"';
+	else	
+		$element.= ' data-multiple_upload="false"';
+}
 
-if( $details['multiple_upload'] == 'true' )
-	$element.= ' data-multiple_upload="true"';
-else	
-	$element.= ' data-multiple_upload="false"';
+if( !empty( $details['attach_to_post'] ) ){
+	if( $details['attach_to_post'] == true )
+		$element.= ' data-attach_to_post="true"';
+}
 	
 if( $context != 'fep' )
 	$element.= ' data-upload_in_backend="true"';

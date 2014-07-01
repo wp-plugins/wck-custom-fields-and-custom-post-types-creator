@@ -116,7 +116,7 @@ function wck_ctc_create_taxonomy(){
 			else 
 				$object_type = '';
 			
-			register_taxonomy( $ct['taxonomy'], $object_type, $args );
+			register_taxonomy( $ct['taxonomy'], $object_type, apply_filters( 'wck_ctc_register_taxonomy_args', $args, $ct['taxonomy'] ) );
 		}
 	}
 }
