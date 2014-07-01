@@ -5,8 +5,8 @@ Donate link: http://www.cozmoslabs.com/wordpress-creation-kit/
 Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, cpt, post type, repeater fields, repeater, repeatable fields, meta box, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
 
 Requires at least: 3.1
-Tested up to: 3.9.0
-Stable tag: 1.1.0
+Tested up to: 3.9.1
+Stable tag: 1.1.1
 
 A must have tool for creating custom fields, custom post types and taxonomies, fast and without any programming knowledge.
 
@@ -141,6 +141,12 @@ Creating a taxonomy generally automatically creates a special query variable usi
 10. Taxonomy listing
 
 == Changelog ==
+= 1.1.1 =
+* Now we can add the same metabox from CFC on multiple ids
+* Added filter for the arguments passed to the register_taonomy() funtion when creating a Custom Taxonomy. ( "wck_ctc_register_taxonomy_args" )
+* Fixed bug that was executing  shortcodes inside escaped shortcodes [[shortcode]]
+* Fixed problem in CPTC that was setting the 'publicly_queryable' argument as true
+
 = 1.1.0 =
 * Added filter for the arguments passed to the register_post_type() funtion when creating a Custom Post Type. ( "wck_cptc_register_post_type_args" )
 * Fixed the missing datepicker css 404 error. 

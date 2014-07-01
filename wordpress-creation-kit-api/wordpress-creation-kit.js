@@ -18,8 +18,6 @@ jQuery(function(){
 });
 
 
-
-
 /* add reccord to the meta */
 function addMeta(value, id, nonce){
 

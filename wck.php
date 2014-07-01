@@ -3,7 +3,7 @@
 Plugin Name: WCK - Custom Fields and Custom Post Types Creator
 Description: WordPress Creation Kit consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT's.
 Author: Reflection Media, Madalin Ungureanu, sareiodata
-Version: 1.1.0
+Version: 1.1.1
 Author URI: http://www.reflectionmedia.ro
 
 License: GPL2
@@ -78,6 +78,9 @@ if( $wck_tools ){
 	}
 	if( !empty( $wck_tools[0]['swift-templates'] ) ){
 		$wck_stp = $wck_tools[0]['swift-templates'];		
+	}	
+	if( !empty( $wck_tools[0]['swift-templates-and-front-end-posting'] ) ){
+		$wck_free_to_pro = $wck_tools[0]['swift-templates-and-front-end-posting'];		
 	}
 }
 /* include Custom Post Type Creator */
@@ -102,6 +105,11 @@ if( file_exists( dirname(__FILE__).'/wck-opc.php' ) && ( !isset( $wck_opc ) || $
 /* include Swift Templates */
 if( file_exists( dirname(__FILE__).'/wck-stp.php' ) && ( !isset( $wck_stp ) || $wck_stp == 'enabled' ) )
 	require_once('wck-stp.php');	
+	
+/* Include Free to Pro menu items */
+if( !file_exists( dirname(__FILE__).'/wck-fep.php' ) && !file_exists( dirname(__FILE__).'/wck-stp.php' ) && !file_exists( dirname(__FILE__).'/update/update-checker.php' ) && ( !isset( $wck_free_to_pro ) || $wck_free_to_pro == 'enabled' )){
+	require_once('wck-free-to-pro.php');
+}	
 	
 /* deactivation hook */
 register_deactivation_hook( __FILE__, 'wck_deactivate_function' );

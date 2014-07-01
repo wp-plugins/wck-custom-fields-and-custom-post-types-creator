@@ -7,7 +7,7 @@ function wck_sas_print_scripts($hook){
 	if( 'wck_page_sas-page' == $hook ){		
 		wp_register_style('wck-sas-css', plugins_url('/css/wck-sas.css', __FILE__));
 		wp_enqueue_style('wck-sas-css');
-	}	
+	}
 }
 
 /* Create the WCK "Start & Settings" Page only for admins ( 'capability' => 'edit_theme_options' ) */
@@ -63,6 +63,8 @@ function wck_sas_create_box(){
 			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Option Pages Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
 		if( file_exists( dirname(__FILE__).'/wck-stp.php' ) )
 			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
+		if( !file_exists( dirname(__FILE__).'/wck-stp.php' ) && !file_exists( dirname(__FILE__).'/wck-fep.php' ) && !file_exists( dirname(__FILE__).'/update/update-checker.php' ) )
+			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates and Front End Posting', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
 			
 		/* set up the box arguments */
 		$args = array(
@@ -91,7 +93,7 @@ function wck_sas_welcome($hook){
 ?>
 		<div class="wrap about-wrap">
 			<h1><?php printf( __( 'Welcome to %s', 'wck' ), $plugin_name ); ?></h1>
-			<div class="about-text"><?php _e( 'WCK helps you to improve the usability of the sites you build, making them manageable by your clients. Your very own repeater custom fields and groups, custom post type and taxonomy creator with front-end posting.', 'wck' ); ?></div>
+			<div class="about-text"><?php _e( 'WCK helps you create <strong>repeater custom fields, custom post types</strong> and <strong>taxonomies</strong> in just a couple of clicks, directly from the WordPress admin interface. WCK content types will improve the usability of the sites you build, making them easy to manage by your clients. ', 'wck' ); ?></div>
 			<div class="wck-badge"><?php printf( __( 'Version %s', 'wck' ), $plugin_version ); ?></div>
 		</div>
 
@@ -112,30 +114,31 @@ function wck_sas_quickintro($hook){
 
 					<h4><?php _e( 'Custom Fields Creator', 'wck' ); ?></h4>
 					<p><?php _e( 'WordPress Creation Kit Pro has support for a wide list of custom fields: WYSIWYG Editor, Upload Field, Date, User, Country, Text Input, Textarea, Drop-Down, Select, Checkboxes, Radio Buttons', 'wck' ); ?></p>
-					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/wordpress-creation-kit/custom-fields-creator/" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>
+					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/docs/wordpress-creation-kit-documentation/#Custom_Fields_Creator" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>
 
 					<h4><?php _e( 'Post Type Creator', 'wck' ); ?></h4>
 					<p><?php _e( 'Create & manage all your custom content types', 'wck' ); ?></p>
-					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/wordpress-creation-kit/custom-post-type-creator/" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>
+					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/docs/wordpress-creation-kit-documentation/#Custom_Post_Type_Creator" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>
 					
 					<h4><?php _e( 'Taxonomy Creator', 'wck' ); ?></h4>
 					<p><?php _e( 'Create new taxonomies for filtering your content', 'wck' ); ?></p>
-					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/wordpress-creation-kit/custom-taxonomy-creator/" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>
+					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/docs/wordpress-creation-kit-documentation/#Custom_Taxonomy_Creator" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>
 					
-					<h4><?php _e( 'Swift Templates (available in the Pro version)', 'wck' ); ?></h4>
+					<h4><?php _e( 'Swift Templates (available in the <a href="http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/?utm_source=wpbackend&utm_medium=clientsite&utm_campaign=WCKFree-SAS" target="_blank">PRO</a> version)', 'wck' ); ?></h4>
 					<p><?php _e( 'Build your front-end templates directly from the WordPress admin UI, without writing any PHP code.', 'wck' ); ?></p>
+					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/docs/wordpress-creation-kit-documentation/#Swift_Templates" target="_blank">here</a> on how to easily display registered custom post types, custom fields and taxonomies in your theme.', 'wck' ); ?></p>		
 					
-					<h4><?php _e( 'Front-End Posting (available in the Pro version)', 'wck' ); ?></h4>
+					<h4><?php _e( 'Front-End Posting (available in the <a href="http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/?utm_source=wpbackend&utm_medium=clientsite&utm_campaign=WCKFree-SAS" target="_blank">PRO</a> version)', 'wck' ); ?></h4>
 					<p><?php _e( 'Create and edit posts/pages or custom posts directly from the front-end.', 'wck' ); ?></p>					
 					<p><?php _e( 'Available shortcodes:', 'wck' ); ?></p>					
 					<ul>
-						<li><?php _e( '[fep form_name="front-end-post-name"] - displayes your form in the front-end', 'wck' ); ?></li>
+						<li><?php _e( '[fep form_name="front-end-post-name"] - displays your form in the front-end', 'wck' ); ?></li>
 						<li><?php _e( '[fep-dashboard] - the quick-dashboard allows: simple profile updates, editing/deletion of posts, pages and custom post types.', 'wck' ); ?></li>
 						<li><?php _e( '[fep-lilo] - login/logout/register widget with the simple usage of a shortcode. Can be added in a page or text widget.', 'wck' ); ?></li>
 					</ul>
-					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/wordpress-creation-kit/frontend-posting/" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>					
+					<p><?php _e( 'Access documentation <a href="http://www.cozmoslabs.com/docs/wordpress-creation-kit-documentation/frontend-posting/" target="_blank">here</a> about how to display them in your templates.', 'wck' ); ?></p>					
 					
-					<h4><?php _e( 'Option Pages (available in the Pro version)', 'wck' ); ?></h4>
+					<h4><?php _e( 'Option Pages (available in the <a href="http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/?utm_source=wpbackend&utm_medium=clientsite&utm_campaign=WCKFree-SAS" target="_blank">PRO</a> version)', 'wck' ); ?></h4>
 					<p><?php _e( 'The Options Page Creator Allows you to create a new menu item called "Options"(for example) which can hold advanced custom field groups. Perfect for theme options or a simple UI for your custom plugin (like a simple testimonials section in the front-end).', 'wck' ); ?></p>
 
 				</div>

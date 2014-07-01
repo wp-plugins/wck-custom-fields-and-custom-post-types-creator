@@ -127,6 +127,22 @@ class Wordpress_Creation_Kit{
 		global $wck_pages_hooknames;
 		
 		if( $this->args['context'] == 'post_meta' ){
+			
+			/* check if the post_id arg contains more than one post id and turn it into an array */
+			if( !empty( $this->args['post_id'] ) ){
+				/* we have multiple values */				
+				if( strpos( $this->args['post_id'], ',' ) !== false ){
+					/* they should be separated by commas */
+					$post_ids = explode( ',', $this->args['post_id'] );
+					/* trim extra spaces */
+					$post_ids = array_map( 'trim', $post_ids );
+				}
+				else{
+					/* jsut one value and make an array out of it */
+					$post_ids = array( trim( $this->args['post_id'] ) );
+				}
+			}
+			
 			if( $this->args['post_id'] == '' && $this->args['page_template'] == '' ){
 				add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), $this->args['post_type'], 'normal', 'high',  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array']) );
 				/* add class to meta box */
@@ -143,7 +159,7 @@ class Wordpress_Creation_Kit{
 					
 				if( $this->args['post_id'] != '' && $this->args['page_template'] != '' ){
 					$template_file = get_post_meta($post_id,'_wp_page_template',TRUE);				
-					if( $this->args['post_id'] == $post_id && $template_file == $this->args['page_template'] )
+					if( in_array( $post_id, $post_ids ) && $template_file == $this->args['page_template'] )
 						add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), 'page', 'normal', 'high',  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array'] ) );
 						
 					/* add class to meta box */
@@ -152,7 +168,7 @@ class Wordpress_Creation_Kit{
 				else{
 				
 					if( $this->args['post_id'] != '' ){
-						if( $this->args['post_id'] == $post_id ){
+						if( in_array( $post_id, $post_ids ) ){
 							$post_type = get_post_type( $post_id );
 							add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), $post_type, 'normal', 'high',  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array'] ) );
 							/* add class to meta box */
@@ -645,7 +661,7 @@ class Wordpress_Creation_Kit{
 		}
 		
 		$required_message .= apply_filters( "wck_extra_message", "", $fields, $required_fields, $meta, $values, $id );
-		$required_fields_with_errors = apply_filters( "wck_required_fields_with_errors", $required_fields_with_errors, $fields, $required_fields, $meta, $value, $id );
+		$required_fields_with_errors = apply_filters( "wck_required_fields_with_errors", $required_fields_with_errors, $fields, $required_fields, $meta, $values, $id );
 
 		if( $required_message != '' ){			
 			$errors = array( 'error' => $required_message, 'errorfields' => $required_fields_with_errors );			

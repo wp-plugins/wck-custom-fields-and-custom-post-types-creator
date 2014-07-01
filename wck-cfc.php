@@ -9,8 +9,8 @@ function wck_cfc_print_scripts($hook){
 			$post_type = $_GET['post_type'];
 		else if( isset( $_GET['post'] ) )
 			$post_type = get_post_type( $_GET['post'] );
-		
-		if( 'wck-meta-box' == $post_type ){			
+
+		if( 'wck-meta-box' == $post_type ){
 			wp_register_style('wck-cfc-css', plugins_url('/css/wck-cfc.css', __FILE__));
 			wp_enqueue_style('wck-cfc-css');
 
@@ -23,8 +23,8 @@ function wck_cfc_print_scripts($hook){
 /* hook to create custom post types */
 add_action( 'init', 'wck_cfc_create_custom_fields_cpt' );
 
-function wck_cfc_create_custom_fields_cpt(){	
-	if( is_admin() && current_user_can( 'edit_theme_options' ) ){		
+function wck_cfc_create_custom_fields_cpt(){
+	if( is_admin() && current_user_can( 'edit_theme_options' ) ){
 		$labels = array(
 			'name' => _x( 'WCK Custom Meta Boxes', 'post type general name'),
 			'singular_name' => _x( 'Custom Meta Box', 'post type singular name'),
@@ -36,7 +36,7 @@ function wck_cfc_create_custom_fields_cpt(){
 			'view_item' => __( "View Meta Box", "wck" ),
 			'search_items' => __( "Search Meta Boxes", "wck" ),
 			'not_found' =>  __( "No Meta Boxes found", "wck" ),
-			'not_found_in_trash' => __( "No Meta Boxes found in Trash", "wck" ), 
+			'not_found_in_trash' => __( "No Meta Boxes found in Trash", "wck" ),
 			'parent_item_colon' => '',
 			'menu_name' => __( "Custom Meta Boxes", "wck" )
 		);
@@ -44,14 +44,14 @@ function wck_cfc_create_custom_fields_cpt(){
 			'labels' => $labels,
 			'public' => false,
 			'publicly_queryable' => false,
-			'show_ui' => true, 	
-			'show_in_menu' => 'wck-page', 				
+			'show_ui' => true,
+			'show_in_menu' => 'wck-page',
 			'has_archive' => false,
-			'hierarchical' => false,									
+			'hierarchical' => false,
 			'capability_type' => 'post',
-			'supports' => array( 'title' )	
-		);			
-				
+			'supports' => array( 'title' )
+		);
+
 		register_post_type( 'wck-meta-box', $args );
 	}
 }
@@ -64,8 +64,8 @@ function wck_cfc_admin_body_class( $classes ){
 			$post_type = $_GET['post_type'];
 		else if( isset( $_GET['post'] ) )
 			$post_type = get_post_type( $_GET['post'] );
-		
-		if( 'wck-meta-box' == $post_type ){			
+
+		if( 'wck-meta-box' == $post_type ){
 			$classes .= ' wck_page_cfc-page ';
 		}
 	}
@@ -76,8 +76,8 @@ function wck_cfc_admin_body_class( $classes ){
 add_filter('post_row_actions','wck_cfc_remove_view_action');
 function wck_cfc_remove_view_action($actions){
 	global $post;
-   if ($post->post_type =="wck-meta-box"){	
-	   unset( $actions['view'] );	  
+   if ($post->post_type =="wck-meta-box"){
+	   unset( $actions['view'] );
    }
    return $actions;
 }
@@ -87,7 +87,7 @@ function wck_cfc_remove_view_action($actions){
 add_action( 'init', 'wck_cfc_create_box', 500 );
 function wck_cfc_create_box(){
 	global $wpdb;
-	
+
 	/* get post types */
 	$public_cpt_arg = apply_filters( 'wck_cfc_public_cpt_arg', true );
 	$args = array(
@@ -98,7 +98,7 @@ function wck_cfc_create_box(){
 	$post_type_names = array();
 	if( !empty( $post_types ) ){
 		foreach ($post_types  as $post_type ) {
-			if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' && $post_type->name != 'wck-swift-template' ) 
+			if ( $post_type->name != 'attachment' && $post_type->name != 'wck-meta-box' && $post_type->name != 'wck-frontend-posting' && $post_type->name != 'wck-option-page' && $post_type->name != 'wck-option-field' && $post_type->name != 'wck-swift-template' )
 				$post_type_names[] = $post_type->name;
 		}
 	}
@@ -112,62 +112,62 @@ function wck_cfc_create_box(){
 			}
 		}
 	}
-	
-	/* get page templates */	
-	$templates = wck_get_page_templates();	
-	
+
+	/* get page templates */
+	$templates = wck_get_page_templates();
+
 	/* set up the fields array */
-	$cfc_box_args_fields = array( 		
-		array( 'type' => 'text', 'title' => __( 'Meta name', 'wck' ), 'description' => __( 'The name of the meta field. It is the name by which you will query the data in the frontend. Must be unique, only lowercase letters, no spaces and no special characters.', 'wck' ), 'required' => true ),		
-		array( 'type' => 'select', 'title' => __( 'Post Type', 'wck' ), 'options' => $post_type_names, 'default-option' => true, 'description' => __( 'What post type the meta box should be attached to', 'wck' ), 'required' => true ),		
+	$cfc_box_args_fields = array(
+		array( 'type' => 'text', 'title' => __( 'Meta name', 'wck' ), 'description' => __( 'The name of the meta field. It is the name by which you will query the data in the frontend. Must be unique, only lowercase letters, no spaces and no special characters.', 'wck' ), 'required' => true ),
+		array( 'type' => 'select', 'title' => __( 'Post Type', 'wck' ), 'options' => $post_type_names, 'default-option' => true, 'description' => __( 'What post type the meta box should be attached to', 'wck' ), 'required' => true ),
 		array( 'type' => 'select', 'title' => __( 'Repeater', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether the box supports just one entry or if it is a repeater field. By default it is a single field.', 'wck' ) ),
 		array( 'type' => 'select', 'title' => __( 'Sortable', 'wck' ), 'options' => array( 'true', 'false' ), 'default' => 'false', 'description' => __( 'Whether the entries are sortable or not. This is valid for repeater fields.', 'wck' ) ),
-		array( 'type' => 'text', 'title' => __( 'Post ID', 'wck' ), 'description' => __( 'ID of a post on which the meta box should appear.', 'wck' ) )			
+		array( 'type' => 'text', 'title' => __( 'Post ID', 'wck' ), 'description' => __( 'ID of a post on which the meta box should appear. You can also input multiple IDs and separate them with ","', 'wck' ) )			
 	);
-	
+
 	/* only in pro version */
 	if( function_exists( 'wck_nr_add_repeater_boxes' ) ){
 			$nested_arg = array( array( 'type' => 'select', 'title' => __( 'Nested', 'wck' ), 'options' => array( 'true', 'false' ), 'default' => 'false', 'description' => __( 'Set to true if you want this metabox to be a nested repeater inside another repeater.', 'wck' ) ) );
 			array_splice( $cfc_box_args_fields, 1, 0, $nested_arg );
 	}
-	
+
 	if( !empty( $templates ) )
 		$cfc_box_args_fields[] = array( 'type' => 'select', 'title' => __( 'Page Template', 'wck' ), 'options' => $templates, 'default-option' => true, 'description' => __( 'If post type is "page" you can further select a page templete. The meta box will only appear  on the page that has that selected page template.', 'wck' ) );
-	
+
 	/* set up the box arguments */
 	$args = array(
 		'metabox_id' => 'wck-cfc-args',
 		'metabox_title' => __( 'Meta Box Arguments', 'wck' ),
 		'post_type' => 'wck-meta-box',
 		'meta_name' => 'wck_cfc_args',
-		'meta_array' => $cfc_box_args_fields,			
+		'meta_array' => $cfc_box_args_fields,
 		'sortable' => false,
 		'single' => true
 	);
 
 	/* create the box */
 	new Wordpress_Creation_Kit( $args );
-	
+
 	/* set up field types */
 	$field_types = array( 'text', 'textarea', 'select', 'checkbox', 'radio', 'upload', 'wysiwyg editor', 'datepicker', 'country select', 'user select', 'cpt select' );
 	$field_types = apply_filters( 'wck_field_types', $field_types );
-	
+
 	/* setup post types */
-	$post_types = get_post_types( array( 'public'   => true ), 'names' ); 
-	
+	$post_types = get_post_types( array( 'public'   => true ), 'names' );
+
 	/* set up the fields array */
-	$cfc_box_fields_fields = apply_filters( 'wck_cfc_box_fields_fields', array( 
+	$cfc_box_fields_fields = apply_filters( 'wck_cfc_box_fields_fields', array(
 		array( 'type' => 'text', 'title' => __( 'Field Title', 'wck' ), 'description' => __( 'Title of the field. A slug will automatically be generated.', 'wck' ), 'required' => true ),
 		array( 'type' => 'select', 'title' => __( 'Field Type', 'wck' ), 'options' => $field_types, 'default-option' => true, 'description' => __( 'The field type', 'wck' ), 'required' => true ),
-		array( 'type' => 'textarea', 'title' => __( 'Description', 'wck' ), 'description' => 'The description of the field.' ),				
+		array( 'type' => 'textarea', 'title' => __( 'Description', 'wck' ), 'description' => 'The description of the field.' ),
 		array( 'type' => 'select', 'title' => __( 'Required', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether the field is required or not', 'wck' ) ),
 		array( 'type' => 'select', 'title' => __( 'CPT', 'wck' ), 'options' => $post_types, 'default' => 'post', 'description' => __( 'Select what custom post type should be used in the CPT Select.', 'wck' ) ),
 		array( 'type' => 'text', 'title' => __( 'Default Value', 'wck' ), 'description' => __( 'Default value of the field. For Checkboxes if there are multiple values separate them with a ",". For an Upload field input an attachment id.', 'wck' ) ),
 		array( 'type' => 'text', 'title' => __( 'Options', 'wck' ), 'description' => __( 'Options for field types "select", "checkbox" and "radio". For multiple options separate them with a ",". You can use the following structure if you want the label to be different from the value: %LabelOne%valueone,%LabelTwo%valuetwo,%LabelThree%valuethree', 'wck' ) ),
 		array( 'type' => 'checkbox', 'title' => __( 'Attach upload to post', 'wck' ), 'description' => __( 'Uploads will be attached to the post if this is checked', 'wck' ), 'options' => array( 'yes' ), 'default' => 'yes' )
-	) );	
-	
-	
+	) );
+
+
 	/* set up the box arguments */
 	$args = array(
 		'metabox_id' => 'wck-cfc-fields',
@@ -184,7 +184,7 @@ function wck_cfc_create_box(){
 /* advanced label options container for update form */
 add_action( "wck_before_add_form_wck_cfc_args_element_0", 'wck_cfc_description_for_args_box' );
 function wck_cfc_description_for_args_box(){
-	echo '<div class="cfc-message"><p>'. __( 'Enter below the arguments for the meta box.', 'wck' ) .'</p></div>';	
+	echo '<div class="cfc-message"><p>'. __( 'Enter below the arguments for the meta box.', 'wck' ) .'</p></div>';
 }
 
 /* add css classes on update form. Allows us to show/hide elements based on field type select value */
@@ -203,7 +203,7 @@ function wck_cfc_element_class($wck_element_class, $meta, $results, $element_id)
 
 /* Show the slug for field title */
 add_filter( "wck_after_listed_wck_cfc_fields_element_0", 'wck_cfc_display_field_title_slug', 10, 3 );
-function wck_cfc_display_field_title_slug( $form, $i, $value ){	
+function wck_cfc_display_field_title_slug( $form, $i, $value ){
 		$form .= '<li class="slug-title"><em>'. __( 'Slug:', 'wck' ) .'</em><span>'. Wordpress_Creation_Kit::wck_generate_slug( $value ) .'</span> '. __( '(Note:changing the slug when you already have a lot of existing entries may result in unexpected behavior.)', 'wck' ) .' </li>';
 	return $form;
 }
@@ -224,59 +224,59 @@ function wck_cfc_create_boxes_args(){
 		'post_type' => 'wck-meta-box',
 		'numberposts' => -1
 	);
-	
+
 	$all_meta_boxes = get_posts( $args );
-	
+
 	$all_box_args = array();
-	
+
 	if( !empty( $all_meta_boxes ) ){
 		foreach( $all_meta_boxes as $meta_box ){
 			$wck_cfc_args = get_post_meta( $meta_box->ID, 'wck_cfc_args', true );
 			$wck_cfc_fields = get_post_meta( $meta_box->ID, 'wck_cfc_fields', true );
-			
+
 			$box_title = get_the_title( $meta_box->ID );
 			/* treat case where the post has no title */
 			if( empty( $box_title ) )
 				$box_title = '(no title)';
-			
+
 			$fields_array = array();
 			if( !empty( $wck_cfc_fields ) ){
 				foreach( $wck_cfc_fields as $wck_cfc_field ){
-					$fields_inner_array = array( 'type' => $wck_cfc_field['field-type'], 'title' => $wck_cfc_field['field-title'] ); 
+					$fields_inner_array = array( 'type' => $wck_cfc_field['field-type'], 'title' => $wck_cfc_field['field-title'] );
 
 					if( !empty( $wck_cfc_field['description'] ) )
-						$fields_inner_array['description'] = $wck_cfc_field['description']; 
+						$fields_inner_array['description'] = $wck_cfc_field['description'];
 					if( !empty( $wck_cfc_field['required'] ) )
 						$fields_inner_array['required'] = $wck_cfc_field['required'] == 'false' ? false : true;
 					if ( !empty( $wck_cfc_field['cpt'] ) )
-						$fields_inner_array['cpt'] = $wck_cfc_field['cpt']; 
+						$fields_inner_array['cpt'] = $wck_cfc_field['cpt'];
 					if( isset( $wck_cfc_field['default-value'] ) )
 						$fields_inner_array['default'] = $wck_cfc_field['default-value'];
 					if( !empty( $wck_cfc_field['options'] ) ){
 						$fields_inner_array['options'] = explode( ',', $wck_cfc_field['options'] );
-						
+
 						if( !empty( $fields_inner_array['options'] ) ){
 							foreach( $fields_inner_array['options'] as  $key => $value ){
 								$fields_inner_array['options'][$key] = trim( $value );
 							}
 						}
-						
+
 					}
 					if( !empty( $wck_cfc_field['attach-upload-to-post'] ) )
 						$fields_inner_array['attach_to_post'] = $wck_cfc_field['attach-upload-to-post'] == 'yes' ? true : false;
-						
+
 					$fields_array[] = $fields_inner_array;
 				}
 			}
-			
+
 			if( !empty( $wck_cfc_args ) ){
 				foreach( $wck_cfc_args as $wck_cfc_arg ){
-				
+
 					/* metabox_id must be different from meta_name */
-					$metabox_id = Wordpress_Creation_Kit::wck_generate_slug( $box_title );				
+					$metabox_id = Wordpress_Creation_Kit::wck_generate_slug( $box_title );
 					if( $wck_cfc_arg['meta-name'] == $metabox_id || 'content' == $metabox_id )
-						$metabox_id = 'wck-'. $metabox_id;						
-					
+						$metabox_id = 'wck-'. $metabox_id;
+
 					$box_args = array(
 									'metabox_id' => $metabox_id,
 									'metabox_title' => $box_title,
@@ -286,22 +286,22 @@ function wck_cfc_create_boxes_args(){
 								);
 					if( !empty( $wck_cfc_arg['sortable'] ) )
 						$box_args['sortable'] = $wck_cfc_arg['sortable'] == 'false' ? false : true;
-					
-					if( !empty( $wck_cfc_arg['repeater'] ) )					
+
+					if( !empty( $wck_cfc_arg['repeater'] ) )
 						$box_args['single'] = $wck_cfc_arg['repeater'] == 'false' ? true : false;
-					
+
 					if( !empty( $wck_cfc_arg['post-id'] ) )
 						$box_args['post_id'] = $wck_cfc_arg['post-id'];
-						
+
 					if( !empty( $wck_cfc_arg['page-template'] ) )
-						$box_args['page_template'] = $wck_cfc_arg['page-template'];	
-					
+						$box_args['page_template'] = $wck_cfc_arg['page-template'];
+
 					$box_args['unserialize_fields'] = apply_filters( 'wck_cfc_unserialize_fields_'.$wck_cfc_arg['meta-name'], false );
-					
+
 					/* nested repeater arg for pro version only */
-					if( !empty( $wck_cfc_arg['nested'] ) )                                  
+					if( !empty( $wck_cfc_arg['nested'] ) )
 						$box_args['nested'] = $wck_cfc_arg['nested'] == 'false' ? false : true;
-									
+
 					$all_box_args[] = apply_filters( "wck_cfc_box_args_".$wck_cfc_arg['meta-name'], $box_args );
 				}
 			}
@@ -323,32 +323,32 @@ function wck_cfc_create_boxes(){
 add_filter( 'wck_required_test_wck_cfc_args_meta-name', 'wck_cfc_ceck_meta_name', 10, 3 );
 function wck_cfc_ceck_meta_name( $bool, $value, $post_id ){
 	global $wpdb;
-	
+
 	$wck_cfc_args = get_post_meta( $post_id, 'wck_cfc_args', true );
-	
-	if( empty( $wck_cfc_args ) ){		
-		//this is the add case		
-		$check_meta_existance = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_key) FROM $wpdb->postmeta WHERE meta_key = %s", $value ) );		
+
+	if( empty( $wck_cfc_args ) ){
+		//this is the add case
+		$check_meta_existance = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_key) FROM $wpdb->postmeta WHERE meta_key = %s", $value ) );
 	}
 	else{
 		//this is the update case
 		if( $wck_cfc_args[0]['meta-name'] != $value ){
 			$check_meta_existance = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_key) FROM $wpdb->postmeta WHERE meta_key = %s", $value ) );
 		}
-		else 
+		else
 			$check_meta_existance = false;
 	}
-	
+
 	if( strpos( $value, ' ' ) === false )
 		$contains_spaces = false;
-	else 
+	else
 		$contains_spaces = true;
-		
+
 	if( trim( strtolower( $value ) ) !== 'content' && trim( strtolower( $value ) ) !== 'action' )
 		$restricted_name = false;
-	else 
+	else
 		$restricted_name = true;
-	
+
 	return ( $check_meta_existance || empty($value) || $contains_spaces || $restricted_name );
 }
 
@@ -359,45 +359,45 @@ function wck_cfc_change_meta_message( $message, $value ){
 	else if( strpos( $value, ' ' ) !== false )
 		return __( "Choose a different Meta Name as this one contains spaces\n", "wck" );
 	else if( trim( strtolower( $value ) ) === 'content' || trim( strtolower( $value ) ) === 'action' )
-		return __( "Choose a different Meta Name as this one is reserved\n", "wck" );	
+		return __( "Choose a different Meta Name as this one is reserved\n", "wck" );
 	else
 		return __( "Choose a different Meta Name as this one already exists\n", "wck" );
 }
 
 /* Field Name Verification */
 add_filter( 'wck_required_test_wck_cfc_fields_field-title', 'wck_cfc_ceck_field_title', 10, 3 );
-function wck_cfc_ceck_field_title( $bool, $value, $post_id ){	
-		
+function wck_cfc_ceck_field_title( $bool, $value, $post_id ){
+
 	if( trim( strtolower( $value ) ) !== 'content' && trim( strtolower( $value ) ) !== 'action' )
 		$restricted_name = false;
-	else 
+	else
 		$restricted_name = true;
-	
+
 	return ( empty($value) || $restricted_name );
 }
 
 add_filter( 'wck_required_message_wck_cfc_fields_field-title', 'wck_cfc_change_field_title_message', 10, 2 );
 function wck_cfc_change_field_title_message( $message, $value ){
 	if( empty( $value ) )
-		return $message;	
+		return $message;
 	else if( trim( strtolower( $value ) ) === 'content' || trim( strtolower( $value ) ) === 'action' )
-		return __( "Choose a different Field Title as this one is reserved\n", "wck" );	
+		return __( "Choose a different Field Title as this one is reserved\n", "wck" );
 }
 
 /* Add the separate meta for post type, post id and page template */
 add_action( 'wck_before_add_meta', 'wck_cfc_add_separate_meta', 10, 3 );
-function wck_cfc_add_separate_meta( $meta, $id, $values ){	
-	if( $meta == 'wck_cfc_args' ){		
+function wck_cfc_add_separate_meta( $meta, $id, $values ){
+	if( $meta == 'wck_cfc_args' ){
 		// Post Type
 		if( !empty( $values['post-type'] ) ){
 			update_post_meta( $id, 'wck_cfc_post_type_arg', $values['post-type'] );
 		}
-		
+
 		// Post Id
 		if( !empty( $values['post-id'] ) ){
 			update_post_meta( $id, 'wck_cfc_post_id_arg', $values['post-id'] );
 		}
-		
+
 		// Page Template
 		if( !empty( $values['page-template'] ) ){
 			update_post_meta( $id, 'wck_cfc_page_template_arg', $values['page-template'] );
@@ -410,26 +410,26 @@ add_action( 'wck_before_update_meta', 'wck_cfc_change_meta_key', 10, 4 );
 function wck_cfc_change_meta_key( $meta, $id, $values, $element_id ){
 	global $wpdb;
 	if( $meta == 'wck_cfc_args' ){
-		$wck_cfc_args = get_post_meta( $id, 'wck_cfc_args', true );		
-		
-		if( $wck_cfc_args[0]['meta-name'] != $values['meta-name'] ){			
-			$wpdb->update( 
-				$wpdb->postmeta, 
-				array( 'meta_key' => $values['meta-name'] ), 
-				array( 'meta_key' => $wck_cfc_args[0]['meta-name'] )				
+		$wck_cfc_args = get_post_meta( $id, 'wck_cfc_args', true );
+
+		if( $wck_cfc_args[0]['meta-name'] != $values['meta-name'] ){
+			$wpdb->update(
+				$wpdb->postmeta,
+				array( 'meta_key' => $values['meta-name'] ),
+				array( 'meta_key' => $wck_cfc_args[0]['meta-name'] )
 			);
 		}
-		
+
 		// Post Type
 		if( $wck_cfc_args[0]['post-type'] != $values['post-type'] ){
 			update_post_meta( $id, 'wck_cfc_post_type_arg', $values['post-type'] );
 		}
-		
+
 		// Post Id
 		if( $wck_cfc_args[0]['post-id'] != $values['post-id'] ){
 			update_post_meta( $id, 'wck_cfc_post_id_arg', $values['post-id'] );
 		}
-		
+
 		// Page Template
 		if( $wck_cfc_args[0]['page-template'] != $values['page-template'] ){
 			update_post_meta( $id, 'wck_cfc_page_template_arg', $values['page-template'] );
@@ -443,18 +443,18 @@ function wck_cfc_change_field_title( $meta, $id, $values, $element_id ){
 	global $wpdb;
 	if( $meta == 'wck_cfc_fields' ){
 		$wck_cfc_fields = get_post_meta( $id, 'wck_cfc_fields', true );
-		
-		if( $wck_cfc_fields[$element_id]['field-title'] != $values['field-title'] ){						
-			
+
+		if( $wck_cfc_fields[$element_id]['field-title'] != $values['field-title'] ){
+
 			$wck_cfc_args = get_post_meta( $id, 'wck_cfc_args', true );
 			$meta_name = $wck_cfc_args[0]['meta-name'];
 			$post_id_with_this_meta = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = %s", $meta_name ) );
-			
+
 			if( !empty( $post_id_with_this_meta ) ){
 				foreach( $post_id_with_this_meta as $post ){
 					$results = get_post_meta( $post->post_id, $meta_name, true );
 					if( !empty( $results ) ){
-						foreach( $results as $key => $result ){			
+						foreach( $results as $key => $result ){
 							$results[$key][ Wordpress_Creation_Kit::wck_generate_slug( $values['field-title'] ) ] = $results[$key][ Wordpress_Creation_Kit::wck_generate_slug( $wck_cfc_fields[$element_id]['field-title'] ) ];
 							unset( $results[$key][ Wordpress_Creation_Kit::wck_generate_slug( $wck_cfc_fields[$element_id]['field-title'] ) ] );
 						}
@@ -470,14 +470,14 @@ function wck_cfc_change_field_title( $meta, $id, $values, $element_id ){
 add_filter("manage_wck-meta-box_posts_columns", "wck_cfc_edit_columns" );
 function wck_cfc_edit_columns($columns){
 	$columns['cfc-id'] = __( "Id", "wck" );
-	$columns['cfc-post-type'] = __( "Post Type", "wck" ); 
-	$columns['cfc-page-template'] = __( "Page Template", "wck" ); 
-	
+	$columns['cfc-post-type'] = __( "Post Type", "wck" );
+	$columns['cfc-page-template'] = __( "Page Template", "wck" );
+
 	/* only in pro version */
 	if( function_exists( 'wck_nr_add_repeater_boxes' ) ){
-		$columns['cfc-nested-repeater'] = __( "Nested Repeater", "wck" ); 
+		$columns['cfc-nested-repeater'] = __( "Nested Repeater", "wck" );
 	}
-	
+
 	return $columns;
 }
 
@@ -487,7 +487,7 @@ function wck_cfc_register_sortable_columns( $columns ) {
 	$columns['cfc-id'] = 'cfc-id';
 	$columns['cfc-post-type'] = 'cfc-post-type';
 	$columns['cfc-page-template'] = 'cfc-page-template';
- 
+
 	return $columns;
 }
 
@@ -500,21 +500,21 @@ function wck_cfc_column_orderby( $vars ) {
 			'orderby' => 'meta_value_num'
 		) );
 	}
-	
+
 	if ( isset( $vars['orderby'] ) && 'cfc-post-type' == $vars['orderby'] ) {
 		$vars = array_merge( $vars, array(
 			'meta_key' => 'wck_cfc_post_type_arg',
 			'orderby' => 'meta_value'
 		) );
 	}
-	
+
 	if ( isset( $vars['orderby'] ) && 'cfc-page-template' == $vars['orderby'] ) {
 		$vars = array_merge( $vars, array(
 			'meta_key' => 'wck_cfc_page_template_arg',
 			'orderby' => 'meta_value'
 		) );
 	}
- 
+
 	return $vars;
 }
 
@@ -525,22 +525,22 @@ function wck_cfc_custom_columns( $column_name, $post_id ){
 		$post_id_arg = get_post_meta( $post_id, 'wck_cfc_post_id_arg', true );
 		echo $post_id_arg;
 	}
-	
+
 	if( $column_name == 'cfc-post-type' ){
 		$post_type_arg = get_post_meta( $post_id, 'wck_cfc_post_type_arg', true );
 		echo $post_type_arg;
 	}
-	
+
 	if( $column_name == 'cfc-page-template' ){
 		$page_template_arg = get_post_meta( $post_id, 'wck_cfc_page_template_arg', true );
 		echo $page_template_arg;
 	}
 
 	/* only in pro version */
-	if( function_exists( 'wck_nr_add_repeater_boxes' ) ){		
+	if( function_exists( 'wck_nr_add_repeater_boxes' ) ){
 		if( $column_name == 'cfc-nested-repeater' ){
 			$box_args = get_post_meta( $post_id, 'wck_cfc_args', true );
-			if( !empty( $box_args[0]['nested'] ) ) 
+			if( !empty( $box_args[0]['nested'] ) )
 				echo $box_args[0]['nested'];
 		}
 	}
@@ -561,8 +561,8 @@ function wck_cfc_side_box_one(){
 /* Contextual Help */
 add_action('current_screen', 'wck_cfc_help');
 
-function wck_cfc_help () {    
-    $screen = get_current_screen();	
+function wck_cfc_help () {
+    $screen = get_current_screen();
     /*
      * Check if current screen is wck_page_cptc-page
      * Don't add help tab if it's not
@@ -576,19 +576,19 @@ function wck_cfc_help () {
         'title'	=> __( 'Overview', 'wck' ),
         'content'	=> '<p>' . __( 'WCK Custom Fields Creator allows you to easily create custom meta boxes for Wordpress without any programming knowledge.', 'wck' ) . '</p>',
     ) );
-	
+
 	$screen->add_help_tab( array(
         'id'	=> 'wck_cfc_arguments',
         'title'	=> __( 'Meta Box Arguments', 'wck' ),
         'content'	=> '<p>' . __( 'Define here the rules for the meta box. This rules are used to set up where the meta box will appear, it\'s type and also the meta key name stored in the database. The name of the entry (Enter title here) will be used as the meta box title.', 'wck' ) . '</p>',
     ) );
-	
+
 	$screen->add_help_tab( array(
         'id'	=> 'wck_cfc_fields',
         'title'	=> __( 'Meta Box Fields', 'wck' ),
         'content'	=> '<p>' . __( 'Define here the fields contained in the meta box. From "Field Title" a slug will be automatically generated and you will use this slug to display the data in the frontend.', 'wck' ) . '</p>',
     ) );
-	
+
 	$screen->add_help_tab( array(
         'id'	=> 'wck_cfc_example',
         'title'	=> __( 'CFC Frontend Example', 'wck' ),
@@ -603,7 +603,7 @@ function wck_cfc_help () {
  *
  * @return array Key is the template name, value is the %Template Name%filename string format of the template
  */
-function wck_get_page_templates() {	
+function wck_get_page_templates() {
 
 	$page_templates = array();
 	$theme_templates = array_flip(wp_get_theme()->get_page_templates());
@@ -631,7 +631,7 @@ function wck_cfc_filter_field_types( $field_types ){
 	$wck_premium_update = WCK_PLUGIN_DIR.'/update/';
 	if ( !file_exists ($wck_premium_update . 'update-checker.php'))
 		$field_types = array( 'text', 'textarea', 'select', 'checkbox', 'radio', 'upload', 'wysiwyg editor' );
-	
+
 	return $field_types;
 }
 ?>
