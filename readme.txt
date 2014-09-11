@@ -5,7 +5,7 @@ Donate link: http://www.cozmoslabs.com/wordpress-creation-kit/
 Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, cpt, post type, repeater fields, repeater, repeatable fields, meta box, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
 
 Requires at least: 3.1
-Tested up to: 3.9.1
+Tested up to: 4.0
 Stable tag: 1.1.1
 
 A must have tool for creating custom fields, custom post types and taxonomies, fast and without any programming knowledge.
