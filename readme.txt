@@ -6,7 +6,7 @@ Tags: custom fields, custom field, wordpress custom fields, advanced custom fiel
 
 Requires at least: 3.1
 Tested up to: 4.0
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 
 A must have tool for creating custom fields, custom post types and taxonomies, fast and without any programming knowledge.
 
@@ -141,6 +141,11 @@ Creating a taxonomy generally automatically creates a special query variable usi
 10. Taxonomy listing
 
 == Changelog ==
+= 1.1.2 =
+* Added filters which we can use to modify the text on metabox buttons in the backend (ex. Add Entry)
+* Fixed a bug that when we had unserialized fields enabled and we deleted some items in the metabox they still remained in the database
+* Fixed some PHP Warnings and Notices
+
 = 1.1.1 =
 * Now we can add the same metabox from CFC on multiple ids
 * Added filter for the arguments passed to the register_taonomy() funtion when creating a Custom Taxonomy. ( "wck_ctc_register_taxonomy_args" )

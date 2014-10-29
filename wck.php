@@ -2,9 +2,9 @@
 /*
 Plugin Name: WCK - Custom Fields and Custom Post Types Creator
 Description: WordPress Creation Kit consists of three tools that can help you create and maintain custom post types, custom taxonomies and most importantly, custom fields and metaboxes for your posts, pages or CPT's.
-Author: Reflection Media, Madalin Ungureanu, sareiodata
-Version: 1.1.1
-Author URI: http://www.reflectionmedia.ro
+Author: Cozmoslabs, Madalin Ungureanu, Cristian Antohe
+Version: 1.1.2
+Author URI: http://www.cozmoslabs.com
 
 License: GPL2
 
@@ -32,6 +32,10 @@ load_plugin_textdomain( 'wck', false, basename( dirname( __FILE__ ) ) . '/langua
 
 /* include Custom Fields Creator API */
 require_once('wordpress-creation-kit-api/wordpress-creation-kit.php');
+
+/* include Notices Class */
+if( file_exists( dirname(__FILE__).'/inc/class_notices.php' ) )
+    require_once('inc/class_notices.php');
 
 /* Create the WCK Page only for admins ( 'capability' => 'edit_theme_options' ) */
 $args = array(							
@@ -136,6 +140,13 @@ if (file_exists ($wck_premium_update . 'update-checker.php')){
 		$wck_update = new wck_PluginUpdateChecker('http://updatemetadata.cozmoslabs.com/?localSerialNumber='.$wck_serial.'&uniqueproduct=WCKH', __FILE__, 'wck-hobby');
 	}
 }
+
+/* Add a halloween notice */
+new WCK_Add_Notices( 'wck_halloween',
+    sprintf( __( '<p style="position:relative;">Halloween treat: 30&#37; OFF on all WordPress Creation Kit purchases 29 - 30 -31 October over at %1$swww.cozmslabs.com%2$s Get your discount code! %3$sDismiss%4$s</p>', 'wck'), "<a href='http://www.cozmoslabs.com/' target='_blank' class='button-primary'>", "</a>", "<a href='". add_query_arg( 'wck_halloween_dismiss_notification', '0' ) ."' class='wck-dismiss-notification' style='position: absolute;right: 0;top: 50%;margin-top: -7px;'>", "</a>" ),
+    'updated halloween',
+    '28 October 2014',
+    '1 November 2014' );
 
 /* include nested repeaters */
 /* if( file_exists( dirname(__FILE__).'/wordpress-creation-kit-api/wck-nested-repeaters/wck-nested-repeaters.php' ) )
