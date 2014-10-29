@@ -2,7 +2,7 @@ jQuery(function(){
 	
 
 
-	jQuery( '#wck_cfc_fields #field-type' ).live( 'change', function () {
+	jQuery(document).on( 'change', '#wck_cfc_fields #field-type', function () {
 		value = jQuery(this).val();
 		
 		if( value == 'select' || value == 'checkbox' || value == 'radio' ){
@@ -26,7 +26,7 @@ jQuery(function(){
 			jQuery( '#wck_cfc_fields .row-cpt' ).hide();
 		}	});
 	
-	jQuery( '#container_wck_cfc_fields #field-type' ).live( 'change', function () {
+	jQuery(document).on( 'change', '#container_wck_cfc_fields #field-type', function () {
 		value = jQuery(this).val();
 		if( value == 'select' || value == 'checkbox' || value == 'radio' ){
 			jQuery(this).parent().parent().parent().children(".row-options").show();

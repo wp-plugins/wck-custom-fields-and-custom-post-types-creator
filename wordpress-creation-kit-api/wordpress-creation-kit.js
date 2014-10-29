@@ -219,7 +219,8 @@ function mb_sortable_elements() {
 					});
 					
 				});
-			}
+			},
+            items: "> tr"
 		});
 		/*I don't know if this is necessary. Remove when I have more time for tests */
 		jQuery( "#sortable:not(select)" ).disableSelection();
@@ -275,7 +276,10 @@ function removeUpdateForm( id ){
 	jQuery( '#'+id).prev().animate({
 		backgroundColor: 'none'
 	}, 700);
-	
+
+    if( jQuery( '#'+id).parent('tbody').hasClass('ui-sortable') )
+        jQuery( '#'+id).parent('tbody').sortable("enable");
+
 	jQuery( '#'+id ).remove();
 }
 
@@ -380,7 +384,7 @@ function wckGoToByScroll(id){
 
 /* Remove uploaded file */
 jQuery(function(){
-	jQuery('.wck-remove-upload').live('click', function(e){		
+	jQuery(document).on('click', '.wck-remove-upload', function(e){
 		jQuery(this).parent().parent().parent().children('.mb-field').val("");
 		jQuery(this).parent().parent('.upload-field-details').html('<p><span class="file-name"></span><span class="file-type"></span></p>');
 	});	
@@ -410,7 +414,19 @@ function wck_set_to_widest( element, parent ){
 			widest = jQuery(this);
 		});
 		
-		jQuery(element, parent).css( {display: 'inline-block', width: widest.width(), paddingRight: '5px'} );
+		jQuery(element, parent).css( {display: 'inline-block', width: widest.width()+2, paddingRight: '5px'} );
 	}
 	else return;
 }
+
+
+/* prevent form submission when hitting enter in text inputs from wck */
+jQuery(function(){
+    jQuery('.wck-post-box').on('keydown', 'input[type="text"]', function ( event ) {
+        if(event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+});
+

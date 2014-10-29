@@ -6,7 +6,7 @@ jQuery(document).ready(function(){
 		var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
 		
 		
-		jQuery('.wck_upload_button').live('click', function( event ){		
+		jQuery(document).on( 'click', '.wck_upload_button', function( event ){
 			event.preventDefault();
 			
 			var set_to_post_id = jQuery( this ).data( 'post_id' ); // Set this
@@ -110,7 +110,7 @@ jQuery(document).ready(function(){
 			wp.media.model.settings.post.id = wp_media_post_id;
 		});
 			
-		jQuery('.wck-remove-upload').live('click', function(e){
+		jQuery(document).on('click', '.wck-remove-upload', function(e){
 			/* update hidden input */
 			removedAttachement = jQuery(this).parent().parent('.upload-field-details').data('attachment_id');
 			upload_input = jQuery(this).parent().parent().parent().children('input[type="hidden"]');

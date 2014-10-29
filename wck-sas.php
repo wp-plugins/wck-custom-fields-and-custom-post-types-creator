@@ -63,7 +63,7 @@ function wck_sas_create_box(){
 			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Option Pages Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
 		if( file_exists( dirname(__FILE__).'/wck-stp.php' ) )
 			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
-		if( !file_exists( dirname(__FILE__).'/wck-stp.php' ) && !file_exists( dirname(__FILE__).'/wck-fep.php' ) && !file_exists( dirname(__FILE__).'/update/update-checker.php' ) )
+		if( !file_exists( dirname(__FILE__).'/wck-stp.php' ) && !file_exists( dirname(__FILE__).'/wck-fep.php' )  )
 			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates and Front End Posting', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
 			
 		/* set up the box arguments */
