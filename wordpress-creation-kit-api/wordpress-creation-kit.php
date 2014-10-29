@@ -19,6 +19,8 @@ if( file_exists( dirname(__FILE__). '/wck-fep/wck-fep.php' ) )
 if( file_exists( dirname(__FILE__). '/wck-static-metabox-api.php' ) )
 	require_once( 'wck-static-metabox-api.php' );
 	
+
+
 	
 /* 
 
@@ -76,6 +78,7 @@ class Wordpress_Creation_Kit{
 		global $wck_objects;
 		global $wck_did_actions;
 		
+
 		/* Merge the input arguments and the defaults. */
 		$this->args = wp_parse_args( $args, $this->defaults );
 		
@@ -119,13 +122,23 @@ class Wordpress_Creation_Kit{
 		$wck_did_actions = true;
 	}
 	
+
+
 	
 	//add metabox using wordpress api
 
 	function wck_add_metabox() {
 		
 		global $wck_pages_hooknames;
-		
+
+        /* here you can set custom restrictions for each metabox, for instance only show for admins */
+        $metabox_restrictions = apply_filters( 'wck_add_meta_box_restrictions', false, $this->args['metabox_id'] );
+        if( $metabox_restrictions )
+            return '';
+
+        $metabox_context = apply_filters( 'wck_add_meta_box_context', 'normal', $this->args['metabox_id'] );
+        $metabox_priority = apply_filters( 'wck_add_meta_box_priority', 'high', $this->args['metabox_id'] );
+
 		if( $this->args['context'] == 'post_meta' ){
 			
 			/* check if the post_id arg contains more than one post id and turn it into an array */
@@ -138,13 +151,13 @@ class Wordpress_Creation_Kit{
 					$post_ids = array_map( 'trim', $post_ids );
 				}
 				else{
-					/* jsut one value and make an array out of it */
+					/* just one value and make an array out of it */
 					$post_ids = array( trim( $this->args['post_id'] ) );
 				}
 			}
 			
 			if( $this->args['post_id'] == '' && $this->args['page_template'] == '' ){
-				add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), $this->args['post_type'], 'normal', 'high',  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array']) );
+				add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), $this->args['post_type'], $metabox_context, $metabox_priority,  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array']) );
 				/* add class to meta box */
 				add_filter( "postbox_classes_".$this->args['post_type']."_".$this->args['metabox_id'], array( &$this, 'wck_add_metabox_classes' ) );
 			}
@@ -156,11 +169,13 @@ class Wordpress_Creation_Kit{
 				else 
 					$post_id = '';
 					
+
+
 					
 				if( $this->args['post_id'] != '' && $this->args['page_template'] != '' ){
 					$template_file = get_post_meta($post_id,'_wp_page_template',TRUE);				
 					if( in_array( $post_id, $post_ids ) && $template_file == $this->args['page_template'] )
-						add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), 'page', 'normal', 'high',  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array'] ) );
+						add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), 'page', $metabox_context, $metabox_priority,  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array'] ) );
 						
 					/* add class to meta box */
 					add_filter( "postbox_classes_page_".$this->args['metabox_id'], array( &$this, 'wck_add_metabox_classes' ) );
@@ -170,7 +185,7 @@ class Wordpress_Creation_Kit{
 					if( $this->args['post_id'] != '' ){
 						if( in_array( $post_id, $post_ids ) ){
 							$post_type = get_post_type( $post_id );
-							add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), $post_type, 'normal', 'high',  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array'] ) );
+							add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), $post_type, $metabox_context, $metabox_priority,  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array'] ) );
 							/* add class to meta box */
 							add_filter( "postbox_classes_".$post_type."_".$this->args['metabox_id'], array( &$this, 'wck_add_metabox_classes' ) );
 						}
@@ -179,7 +194,7 @@ class Wordpress_Creation_Kit{
 					if(  $this->args['page_template'] != '' ){
 						$template_file = get_post_meta($post_id,'_wp_page_template',TRUE);	
 						if ( $template_file == $this->args['page_template'] ){
-							add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), 'page', 'normal', 'high',  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array']) );
+							add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), 'page', $metabox_context, $metabox_priority,  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array']) );
 							/* add class to meta box */
 							add_filter( "postbox_classes_page_".$this->args['metabox_id'], array( &$this, 'wck_add_metabox_classes' ) );
 						}
@@ -190,7 +205,7 @@ class Wordpress_Creation_Kit{
 			}		
 		}
 		else if( $this->args['context'] == 'option' ){			
-			add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), $wck_pages_hooknames[$this->args['post_type']], 'normal', 'high',  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array']) );
+			add_meta_box($this->args['metabox_id'], $this->args['metabox_title'], array( &$this, 'wck_content' ), $wck_pages_hooknames[$this->args['post_type']], $metabox_context, $metabox_priority,  array( 'meta_name' => $this->args['meta_name'], 'meta_array' => $this->args['meta_array']) );
 			/* add class to meta box */
 			add_filter( "postbox_classes_".$wck_pages_hooknames[$this->args['post_type']]."_".$this->args['metabox_id'], array( &$this, 'wck_add_metabox_classes' ) );
 		}
@@ -222,6 +237,10 @@ class Wordpress_Creation_Kit{
 		else 
 			self::create_add_form($metabox['args']['meta_array'], $metabox['args']['meta_name'], $post);
 		
+
+
+
+
 		//output the entries
 		echo self::wck_output_meta_content($metabox['args']['meta_name'], $post_id, $metabox['args']['meta_array']);
 	}
@@ -334,7 +353,7 @@ class Wordpress_Creation_Kit{
 				}
 				?>
 				<li style="overflow:visible;" class="add-entry-button">
-					<a href="javascript:void(0)" class="button-primary" onclick="addMeta('<?php echo esc_js($meta); ?>', '<?php echo esc_js( $post_id ); ?>', '<?php echo esc_js($nonce); ?>')"><span><?php _e( 'Add Entry', 'wck' ); ?></span></a>
+					<a href="javascript:void(0)" class="button-primary" onclick="addMeta('<?php echo esc_js($meta); ?>', '<?php echo esc_js( $post_id ); ?>', '<?php echo esc_js($nonce); ?>')"><span><?php _e( apply_filters( 'wck_add_entry_button', 'Add Entry', $meta, $post ), 'wck' ); ?></span></a>
 				</li>
 			</ul>
 		</div>
@@ -393,8 +412,8 @@ class Wordpress_Creation_Kit{
 				}
 			}
 			$form .= '<li style="overflow:visible;">';
-			$form .= '<a href="javascript:void(0)" class="button-primary" onclick=\'updateMeta("'.esc_js($meta).'", "'.esc_js($id).'", "'.esc_js($element_id).'", "'.esc_js($update_nonce).'")\'><span>'. __( 'Save Changes', 'wck' ) .'</span></a>';
-			$form .= '<a href="javascript:void(0)" class="button-secondary" style="margin-left:10px;" onclick=\'removeUpdateForm("'. esc_js( 'update_container_'.$meta.'_'.$element_id ). '" )\'><span>'. __( 'Cancel', 'wck' ) .'</span></a>';
+			$form .= '<a href="javascript:void(0)" class="button-primary" onclick=\'updateMeta("'.esc_js($meta).'", "'.esc_js($id).'", "'.esc_js($element_id).'", "'.esc_js($update_nonce).'")\'><span>'. __( apply_filters( 'wck_save_changes_button', 'Save Changes', $meta ), 'wck' ) .'</span></a>';
+			$form .= '<a href="javascript:void(0)" class="button-secondary" style="margin-left:10px;" onclick=\'removeUpdateForm("'. esc_js( 'update_container_'.$meta.'_'.$element_id ). '" )\'><span>'. __( apply_filters( 'wck_cancel_button', 'Cancel', $meta ), 'wck' ) .'</span></a>';
 			$form .= '</li>';			
 			
 			$form .= '</ul>';
@@ -435,7 +454,7 @@ class Wordpress_Creation_Kit{
 		
 		
 		if($results != null){
-			$list .= '<thead><tr><th class="wck-number">#</th><th class="wck-content">'. __( 'Content', 'wck' ) .'</th><th class="wck-edit">'. __( 'Edit', 'wck' ) .'</th><th class="wck-delete">'. __( 'Delete', 'wck' ) .'</th></tr></thead>';
+			$list .= apply_filters( 'wck_metabox_content_header_'.$meta , '<thead><tr><th class="wck-number">#</th><th class="wck-content">'. __( 'Content', 'wck' ) .'</th><th class="wck-edit">'. __( 'Edit', 'wck' ) .'</th><th class="wck-delete">'. __( 'Delete', 'wck' ) .'</th></tr></thead>' );
 			$i=0;
 			foreach ($results as $result){			
 				
@@ -444,6 +463,7 @@ class Wordpress_Creation_Kit{
 				$i++;
 			}
 		}
+		$list .= apply_filters( 'wck_metabox_content_footer_'.$meta , '' );
 		$list .= '</table>';
 		
 		$list = apply_filters('wck_metabox_content_'.$meta, $list, $id);
@@ -458,6 +478,7 @@ class Wordpress_Creation_Kit{
 		$wck_element_class = '';
 		$wck_element_class = apply_filters( "wck_element_class_{$meta}", $wck_element_class, $meta, $results, $element_id );
 		
+
 		$list = '';
 		$list .= '<tr id="element_'.$element_id.'" ' . $wck_element_class . '>'; 
 		$list .= '<td style="text-align:center;vertical-align:middle;" class="wck-number">'. $entry_nr .'</td>'; 
@@ -519,9 +540,9 @@ class Wordpress_Creation_Kit{
 			if( wck_nr_check_for_nested_repeaters( $fields ) === true ){
 				$list .= wck_nr_handle_repeaters( $meta, $id, $fields, $results, $element_id );
 			}
+
 		}
 		
-		$list .= '</div>';	
 		$list .= '</td>';				
 		$list .= '<td style="text-align:center;vertical-align:middle;" class="wck-edit"><a href="javascript:void(0)" class="button-secondary"  onclick=\'showUpdateFormMeta("'.esc_js($meta).'", "'.esc_js($id).'", "'.esc_js($element_id).'", "'.esc_js($edit_nonce).'")\' title="'. __( 'Edit this item', 'wck' ) .'">'. __( 'Edit', 'wck' ) .'</a></td>';
 		$list .= '<td style="text-align:center;vertical-align:middle;" class="wck-delete"><a href="javascript:void(0)" class="mbdelete" onclick=\'removeMeta("'.esc_js($meta).'", "'.esc_js($id).'", "'.esc_js($element_id).'", "'.esc_js($delete_nonce).'")\' title="'. __( 'Delete this item', 'wck' ) .'">'. __( 'Delete', 'wck' ) .'</a></td>';
@@ -582,7 +603,7 @@ class Wordpress_Creation_Kit{
 		}
 	}	
 	
-	/* enque the js/css */
+	/* enqueue the js/css */
 	function wck_print_scripts($hook){
 		global $wck_pages_hooknames;
 		
@@ -593,10 +614,15 @@ class Wordpress_Creation_Kit{
 		}
 		elseif( $this->args['context'] == 'option' ){
 			if( $wck_pages_hooknames[$this->args['post_type']] == $hook ){				
-				self::wck_enqueue( 'options' );		
+				self::wck_enqueue();
 			}
 		}
-	}
+
+        /* fail-safe to load wck scripts everywhere if we want to */
+        $load_scripts_everywhere = apply_filters( 'wck_force_print_scripts', false );
+        if( $load_scripts_everywhere )
+            self::wck_enqueue();
+    }
 	
 	/* our own ajaxurl */
 	function wck_print_ajax_url(){		
@@ -606,7 +632,7 @@ class Wordpress_Creation_Kit{
 	
 	
 	/* Helper function for enqueueing scripts and styles */
-	private static function wck_enqueue( $context = '' ){
+	private static function wck_enqueue(){
 		global $wck_printed_scripts;
 		
 		wp_enqueue_script( 'jquery-ui-draggable' );
@@ -671,6 +697,9 @@ class Wordpress_Creation_Kit{
 	}
 	
 
+
+
+
 	/* ajax add a reccord to the meta */
 	function wck_add_meta(){
 		check_ajax_referer( "wck-add-meta" );
@@ -709,7 +738,7 @@ class Wordpress_Creation_Kit{
 		if( $this->args['context'] == 'post_meta' )
 			update_post_meta($id, $meta, $results);
 		else if ( $this->args['context'] == 'option' )
-			update_option( $meta, $results );
+			update_option( $meta,  wp_unslash( $results ) );
 		
 		/* if unserialize_fields is true add for each entry separate post meta for every element of the form  */
 		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){
@@ -765,9 +794,9 @@ class Wordpress_Creation_Kit{
 		if( $this->args['context'] == 'post_meta' )
 			update_post_meta($id, $meta, $results);
 		else if ( $this->args['context'] == 'option' )
-			update_option( $meta, $results );
+			update_option( $meta, wp_unslash( $results ) );
 		
-		/* if unserialize_fields is true update the coresponding post metas for every element of the form  */
+		/* if unserialize_fields is true update the corresponding post metas for every element of the form  */
 		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){
 			
 			$meta_suffix = $element_id + 1;	
@@ -888,17 +917,28 @@ class Wordpress_Creation_Kit{
 		if( $this->args['context'] == 'post_meta' )
 			update_post_meta($id, $meta, $results);
 		else if ( $this->args['context'] == 'option' )
-			update_option( $meta, $results );
+			update_option( $meta, wp_unslash( $results ) );
 		
 		
 		
 		/* TODO: optimize so that it updates from the deleted element forward */
-		/* if unserialize_fields is true delete the coresponding post metas */
-		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){			
-			
-			$meta_suffix = 1;			
-			
-			if( !empty( $results ) ){
+		/* if unserialize_fields is true delete the corresponding post metas */
+		if( $this->args['unserialize_fields'] && $this->args['context'] == 'post_meta' ){
+
+			/* delete all the unserialized meta so we can add them again */
+			$meta_suffix = 1;
+			if( !empty( $old_results ) ) {
+				foreach ( $old_results as $result ) {
+					foreach ( $result as $name => $value ) {
+						delete_post_meta( $id, $meta . '_' . $name . '_' . $meta_suffix );
+					}
+					$meta_suffix ++;
+				}
+			}
+
+			/* now add the remaining values as unserialized */
+			$meta_suffix = 1;
+			if( !empty( $results ) && count( $results ) != 0 ){
 				foreach( $results as $result ){				
 					foreach ( $result as $name => $value){					
 						update_post_meta($id, $meta.'_'.$name.'_'.$meta_suffix, $value);					
@@ -906,18 +946,7 @@ class Wordpress_Creation_Kit{
 					$meta_suffix++;			
 				}
 			}
-			
-			if( count( $results ) == 0 )
-				$results = $old_results;
-			
-			if( !empty( $results ) ){
-				foreach( $results as $result ){				
-					foreach ( $result as $name => $value){
-						delete_post_meta( $id, $meta.'_'.$name.'_'.$meta_suffix );					
-					}
-					break;
-				}
-			}
+
 		}
 		
 		exit;
@@ -958,7 +987,7 @@ class Wordpress_Creation_Kit{
 		if( $this->args['context'] == 'post_meta' )
 			update_post_meta($id, $meta, $results);
 		else if ( $this->args['context'] == 'option' )
-			update_option( $meta, $results );
+			update_option( $meta, wp_unslash( $results ) );
 		
 		
 		/* if unserialize_fields is true reorder all the coresponding post metas  */
@@ -1159,6 +1188,10 @@ class Wordpress_Creation_Kit{
 }
 
 
+
+
+
+
 /*
 Helper class that creates admin menu pages ( both top level menu pages and submenu pages )
 Default Usage: 
@@ -1226,6 +1259,7 @@ class WCK_Page_Creator{
 		/* Global that will hold all the arguments for all the menu pages */
 		global $wck_pages;		
 		
+
 		/* Merge the input arguments and the defaults. */
 		$this->args = wp_parse_args( $args, $this->defaults );
 		
@@ -1360,4 +1394,5 @@ class WCK_Page_Creator{
 		<?php
 	}
 }
+
 ?>
