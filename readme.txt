@@ -5,8 +5,8 @@ Donate link: http://www.cozmoslabs.com/wordpress-creation-kit/
 Tags: custom fields, custom field, wordpress custom fields, advanced custom fields, custom post type, custom post types, post types, cpt, post type, repeater fields, repeater, repeatable fields, meta box, metabox, taxonomy, taxonomies, custom taxonomy, custom taxonomies, custom, custom fields creator, post meta, meta, get_post_meta, post creator, cck, content types, types
 
 Requires at least: 3.1
-Tested up to: 4.0
-Stable tag: 1.1.2
+Tested up to: 4.0.1
+Stable tag: 1.1.3
 
 A must have tool for creating custom fields, custom post types and taxonomies, fast and without any programming knowledge.
 
@@ -141,6 +141,10 @@ Creating a taxonomy generally automatically creates a special query variable usi
 10. Taxonomy listing
 
 == Changelog ==
+= 1.1.3 =
+* Wysiwyg editor fields no longer strips html tags
+* Changes to WCK deactivate function so it doesn't throw notices
+
 = 1.1.2 =
 * Added filters which we can use to modify the text on metabox buttons in the backend (ex. Add Entry)
 * Fixed a bug that when we had unserialized fields enabled and we deleted some items in the metabox they still remained in the database
