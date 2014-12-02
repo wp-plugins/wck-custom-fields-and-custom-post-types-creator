@@ -13,6 +13,8 @@ $element .= esc_attr( Wordpress_Creation_Kit::wck_generate_slug( $details['title
 if( !empty( $details['default-option'] ) && $details['default-option'] )
 	$element .= '<option value="">'. __('...Chose', 'wck') .'</option>';
 
+$field_name = Wordpress_Creation_Kit::wck_generate_slug( $details['title'], $details );
+
 $options = '';
 if( !empty( $details['options'] ) ){
 		$i = 0;		
@@ -37,12 +39,13 @@ if( !empty( $details['options'] ) ){
 					}
 				}
 			}
-				
-			$options .= '<option value="'. esc_attr( $value_attr ) .'"  '. selected( $value_attr, $value, false ) .' >'. esc_html( $label ) .'</option>';
+
+            $optionOutput = '<option value="'. esc_attr( $value_attr ) .'"  '. selected( $value_attr, $value, false ) .' >'. esc_html( $label ) .'</option>';
+            $options .= apply_filters( "wck_select_{$meta}_{$field_name}_option_{$i}", $optionOutput, $i);
 			$i++;
 		}
 }				
-$field_name = Wordpress_Creation_Kit::wck_generate_slug( $details['title'] );
+
 $element .= apply_filters( "wck_select_{$meta}_{$field_name}_options", $options );	
 $element .= '</select>';
 ?>

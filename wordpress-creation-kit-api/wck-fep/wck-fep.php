@@ -1072,7 +1072,7 @@ function wck_fep_redirect_to_front_end() {
 
 
 /* Set up upload field for frontend */
-/* owerwrite the two functions for when an upload is made from the frontend so they don't check for a logged in user */
+/* overwrite the two functions for when an upload is made from the frontend so they don't check for a logged in user */
 if( strpos( wp_get_referer(), 'wp-admin' ) === false && isset( $_REQUEST['action'] ) && 'upload-attachment' == $_REQUEST['action'] ){
 		if( !function_exists( 'check_ajax_referer' ) ){
 			function check_ajax_referer( ) {
@@ -1091,11 +1091,11 @@ if( strpos( wp_get_referer(), 'wp-admin' ) === false && isset( $_REQUEST['action
 add_action( 'after_setup_theme', 'wck_create_fake_user_when_uploading_and_not_logged_in' );
 function wck_create_fake_user_when_uploading_and_not_logged_in(){
 	if( strpos( wp_get_referer(), 'wp-admin' ) === false && isset( $_REQUEST['action'] ) && 'upload-attachment' == $_REQUEST['action'] ){
-		if( !is_user_logged_in() ){
-			global $current_user;			
+        if( !is_user_logged_in() || !current_user_can('upload_files') || !current_user_can( 'edit_posts' ) ){
+            global $current_user;
 			$current_user = new WP_User( 0, 'frontend_uploader' );	
-			$current_user->allcaps = array( 'upload_files' => true, );
-		}		
+			$current_user->allcaps = array( "upload_files" => true, "edit_posts" => true, "edit_others_posts" => true, "edit_pages" => true, "edit_others_pages" => true );
+		}
 	}
 }
 
@@ -1111,7 +1111,7 @@ function wck_modify_query_attachements_when_not_logged_in(){
 	} 
 }
 
-/* restrict file types of the ipload field functionality */
+/* restrict file types of the upload field functionality */
 add_filter('wp_handle_upload_prefilter', 'wck_upload_file_type');
 function wck_upload_file_type($file) {	
     if (isset($_POST['allowed_type']) && !empty($_POST['allowed_type'])){
