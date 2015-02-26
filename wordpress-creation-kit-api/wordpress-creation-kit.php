@@ -357,7 +357,7 @@ class Wordpress_Creation_Kit{
                         $value = '';
                         if( $this->args['single'] == true ) {
                             $value = null;
-                            if (isset($results[0][Wordpress_Creation_Kit::wck_generate_slug( $details['title'], $details )]))
+                            if( !empty( $results[0] ) && !empty( $results[0][Wordpress_Creation_Kit::wck_generate_slug( $details['title'], $details )] ) )
                                 $value = $results[0][Wordpress_Creation_Kit::wck_generate_slug( $details['title'], $details )];
                         }
 						
