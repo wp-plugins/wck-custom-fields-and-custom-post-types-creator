@@ -53,18 +53,18 @@ function wck_sas_create_box(){
 				
 		/* set up the tools array */			
 		$sas_tools_activate = array(
-			array( 'type' => 'radio', 'title' => __( 'Custom Fields Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
-			array( 'type' => 'radio', 'title' => __( 'Custom Post Type Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
-			array( 'type' => 'radio', 'title' => __( 'Custom Taxonomy Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
+			array( 'type' => 'radio', 'title' => __( 'Custom Fields Creator', 'wck' ), 'slug' => 'custom-fields-creator', 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
+			array( 'type' => 'radio', 'title' => __( 'Custom Post Type Creator', 'wck' ), 'slug' => 'custom-post-type-creator', 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
+			array( 'type' => 'radio', 'title' => __( 'Custom Taxonomy Creator', 'wck' ), 'slug' => 'custom-taxonomy-creator', 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' ),
 		);
 		if( file_exists( dirname(__FILE__).'/wck-fep.php' ) )
-			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Frontend Posting', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
+			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Frontend Posting', 'wck' ), 'slug' => 'frontend-posting', 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
 		if( file_exists( dirname(__FILE__).'/wck-opc.php' ) )
-			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Option Pages Creator', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
+			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Option Pages Creator', 'wck' ), 'slug' => 'option-pages-creator', 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
 		if( file_exists( dirname(__FILE__).'/wck-stp.php' ) )
-			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
+			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates', 'wck' ), 'slug' => 'swift-templates', 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
 		if( !file_exists( dirname(__FILE__).'/wck-stp.php' ) && !file_exists( dirname(__FILE__).'/wck-fep.php' )  )
-			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates and Front End Posting', 'wck' ), 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
+			$sas_tools_activate[] = array( 'type' => 'radio', 'title' => __( 'Swift Templates and Front End Posting', 'wck' ), 'slug' => 'swift-templates-and-front-end-posting', 'options' => array( 'enabled', 'disabled' ), 'default' => 'enabled' );
 			
 		/* set up the box arguments */
 		$args = array(

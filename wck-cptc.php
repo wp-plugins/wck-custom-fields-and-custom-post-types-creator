@@ -46,37 +46,37 @@ function wck_cptc_create_box(){
 		
 		/* set up the fields array */
 		$cpt_creation_fields = array( 
-			array( 'type' => 'text', 'title' => __( 'Post type', 'wck' ), 'description' => __( '(max. 20 characters, can not contain capital letters, hyphens, or spaces)', 'wck' ), 'required' => true ), 
-			array( 'type' => 'textarea', 'title' => __( 'Description', 'wck' ), 'description' => __( 'A short descriptive summary of what the post type is.', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Singular Label', 'wck' ), 'required' => true, 'description' => __( 'ex. Book', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Plural Label', 'wck' ), 'required' => true, 'description' => __( 'ex. Books', 'wck' ) ),
-			array( 'type' => 'select', 'title' => __( 'Hierarchical', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether the post type is hierarchical. Allows Parent to be specified.', 'wck' ) ),
-			array( 'type' => 'select', 'title' => __( 'Has Archive', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Enables post type archives. Will use string as archive slug. Will generate the proper rewrite rules if rewrite is enabled.', 'wck' ) ),
-			array( 'type' => 'checkbox', 'title' => __( 'Supports', 'wck' ), 'options' => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions', 'page-attributes', 'post-formats' ), 'default' =>'title, editor' ),
+			array( 'type' => 'text', 'title' => __( 'Post type', 'wck' ), 'slug' => 'post-type', 'description' => __( '(max. 20 characters, can not contain capital letters, hyphens, or spaces)', 'wck' ), 'required' => true ),
+			array( 'type' => 'textarea', 'title' => __( 'Description', 'wck' ), 'slug' => 'description', 'description' => __( 'A short descriptive summary of what the post type is.', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Singular Label', 'wck' ), 'slug' => 'singular-label', 'required' => true, 'description' => __( 'ex. Book', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Plural Label', 'wck' ), 'slug' => 'plural-label', 'required' => true, 'description' => __( 'ex. Books', 'wck' ) ),
+			array( 'type' => 'select', 'title' => __( 'Hierarchical', 'wck' ), 'slug' => 'hierarchical', 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether the post type is hierarchical. Allows Parent to be specified.', 'wck' ) ),
+			array( 'type' => 'select', 'title' => __( 'Has Archive', 'wck' ), 'slug' => 'has-archive', 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Enables post type archives. Will use string as archive slug. Will generate the proper rewrite rules if rewrite is enabled.', 'wck' ) ),
+			array( 'type' => 'checkbox', 'title' => __( 'Supports', 'wck' ), 'slug' => 'supports', 'options' => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions', 'page-attributes', 'post-formats' ), 'default' =>'title, editor' ),
 			
 			
-			array( 'type' => 'text', 'title' => __( 'Add New', 'wck' ), 'description' => __( 'ex. Add New', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Add New Item', 'wck' ), 'description' => __( 'ex. Add New Book', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Edit Item', 'wck' ), 'description' => __( 'ex. Edit Book', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'New Item', 'wck' ), 'description' => __( 'ex. New Book', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'All Items', 'wck' ), 'description' => __( 'ex. All Books', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'View Items', 'wck' ), 'description' => __( 'ex. View Books', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Search Items', 'wck' ), 'description' => __( 'ex. Search Books', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Not Found', 'wck' ), 'description' => __( 'ex. No Books Found', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Not Found In Trash', 'wck' ), 'description' => __( 'ex. No Books found in Trash', 'wck' ) ),	
-			array( 'type' => 'text', 'title' => __( 'Parent Item Colon', 'wck' ), 'description' => __( 'the parent text. This string isn\'t used on non-hierarchical types. In hierarchical ones the default is Parent Page ', 'wck' ) ),	
-			array( 'type' => 'text', 'title' => __( 'Menu Name', 'wck' ) ),			
+			array( 'type' => 'text', 'title' => __( 'Add New', 'wck' ), 'slug' => 'add-new', 'description' => __( 'ex. Add New', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Add New Item', 'wck' ), 'slug' => 'add-new-item', 'description' => __( 'ex. Add New Book', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Edit Item', 'wck' ), 'slug' => 'edit-item', 'description' => __( 'ex. Edit Book', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'New Item', 'wck' ), 'slug' => 'new-item', 'description' => __( 'ex. New Book', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'All Items', 'wck' ), 'slug' => 'all-items', 'description' => __( 'ex. All Books', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'View Items', 'wck' ), 'slug' => 'view-items', 'description' => __( 'ex. View Books', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Search Items', 'wck' ), 'slug' => 'search-items', 'description' => __( 'ex. Search Books', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Not Found', 'wck' ), 'slug' => 'not-found', 'description' => __( 'ex. No Books Found', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Not Found In Trash', 'wck' ), 'slug' => 'not-found-in-trash', 'description' => __( 'ex. No Books found in Trash', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Parent Item Colon', 'wck' ), 'slug' => 'parent-item-colon', 'description' => __( 'the parent text. This string isn\'t used on non-hierarchical types. In hierarchical ones the default is Parent Page ', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Menu Name', 'wck' ), 'slug' => 'menu-name' ),
 			
-			array( 'type' => 'select', 'title' => __( 'Public', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Meta argument used to define default values for publicly_queriable, show_ui, show_in_nav_menus and exclude_from_search', 'wck' ) ),
-			array( 'type' => 'select', 'title' => __( 'Show UI', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to generate a default UI for managing this post type.', 'wck' ) ), 
-			array( 'type' => 'select', 'title' => __( 'Show In Nav Menus', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether post_type is available for selection in navigation menus.', 'wck' ) ), 
-			array( 'type' => 'text', 'title' => __( 'Show In Menu', 'wck' ), 'default' => 'true', 'description' => __( 'Whether to show the post type in the admin menu. show_ui must be true. "false" - do not display in the admin menu, "true" - display as a top level menu, "some string" - If an existing top level page such as "tools.php" or "edit.php?post_type=page", the post type will be placed as a sub menu of that.', 'wck' ) ), 
-			array( 'type' => 'text', 'title' => __( 'Menu Position', 'wck' ), 'description' => __( 'The position in the menu order the post type should appear.', 'wck' ) ), 
-			array( 'type' => 'text', 'title' => __( 'Menu Icon', 'wck' ), 'description' => __( 'The url to the icon to be used for this menu.', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Capability Type', 'wck' ), 'description' => __( 'The string to use to build the read, edit, and delete capabilities.', 'wck' ), 'default' => 'post' ), 		
-			array( 'type' => 'checkbox', 'title' => __( 'Taxonomies', 'wck' ), 'options' => $taxonomie_names ),		
-			array( 'type' => 'select', 'title' => __( 'Rewrite', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Rewrite permalinks.', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Rewrite Slug', 'wck' ), 'description' => __( 'Defaults to post type name.', 'wck' ) )
+			array( 'type' => 'select', 'title' => __( 'Public', 'wck' ), 'slug' => 'public', 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Meta argument used to define default values for publicly_queriable, show_ui, show_in_nav_menus and exclude_from_search', 'wck' ) ),
+			array( 'type' => 'select', 'title' => __( 'Show UI', 'wck' ), 'slug' => 'show-ui', 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to generate a default UI for managing this post type.', 'wck' ) ),
+			array( 'type' => 'select', 'title' => __( 'Show In Nav Menus', 'wck' ), 'slug' => 'show-in-nav-menus', 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether post_type is available for selection in navigation menus.', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Show In Menu', 'wck' ), 'slug' => 'show-in-menu', 'default' => 'true', 'description' => __( 'Whether to show the post type in the admin menu. show_ui must be true. "false" - do not display in the admin menu, "true" - display as a top level menu, "some string" - If an existing top level page such as "tools.php" or "edit.php?post_type=page", the post type will be placed as a sub menu of that.', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Menu Position', 'wck' ), 'slug' => 'menu-position', 'description' => __( 'The position in the menu order the post type should appear.', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Menu Icon', 'wck' ), 'slug' => 'menu-icon', 'description' => __( 'The url to the icon to be used for this menu.', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Capability Type', 'wck' ), 'slug' => 'capability-type', 'description' => __( 'The string to use to build the read, edit, and delete capabilities.', 'wck' ), 'default' => 'post' ),
+			array( 'type' => 'checkbox', 'title' => __( 'Taxonomies', 'wck' ), 'slug' => 'taxonomies', 'options' => $taxonomie_names ),
+			array( 'type' => 'select', 'title' => __( 'Rewrite', 'wck' ), 'slug' => 'rewrite', 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Rewrite permalinks.', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Rewrite Slug', 'wck' ), 'slug' => 'rewrite-slug', 'description' => __( 'Defaults to post type name.', 'wck' ) )
 		);
 		
 		/* set up the box arguments */
@@ -96,7 +96,7 @@ function wck_cptc_create_box(){
 }
 
 /* hook to create custom post types */
-add_action( 'init', 'wck_cptc_create_cpts' );
+add_action( 'init', 'wck_cptc_create_cpts', 8 );
 
 function wck_cptc_create_cpts(){
 	$cpts = get_option('wck_cptc');
@@ -255,16 +255,22 @@ function wck_cptc_after_refresh_list(){
 }
 
 /* Add side metaboxes */
-add_action('add_meta_boxes', 'wck_cptc_add_side_boxes' );
-function wck_cptc_add_side_boxes(){
-	add_meta_box( 'wck-cptc-side', __( 'Wordpress Creation Kit', 'wck' ), 'wck_cptc_side_box_one', 'wck_page_cptc-page', 'side', 'high' );
-}
-function wck_cptc_side_box_one(){
-	?>
-		<a href="http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/?utm_source=wpbackend&utm_medium=clientsite&utm_campaign=WCKFree"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>?v=1" width="260" height="385" alt="WCK-PRO"/></a>
-	<?php
-}
+if( !file_exists( dirname(__FILE__).'/wck-stp.php' ) ) {
+    add_action('add_meta_boxes', 'wck_cptc_add_side_boxes');
+    function wck_cptc_add_side_boxes()
+    {
+        add_meta_box('wck-cptc-side', __('Wordpress Creation Kit', 'wck'), 'wck_cptc_side_box_one', 'wck_page_cptc-page', 'side', 'high');
+    }
 
+    function wck_cptc_side_box_one()
+    {
+        ?>
+        <a href="http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/?utm_source=wpbackend&utm_medium=clientsite&utm_campaign=WCKFree"><img
+                src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>?v=1" width="260" height="385"
+                alt="WCK-PRO"/></a>
+    <?php
+    }
+}
 
 /* Contextual Help */
 add_action('load-wck_page_cptc-page', 'wck_cptc_help');

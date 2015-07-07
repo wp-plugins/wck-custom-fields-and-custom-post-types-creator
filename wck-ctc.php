@@ -34,30 +34,30 @@ function wck_ctc_create_box(){
 		
 		
 		$ct_creation_fields = array( 
-			array( 'type' => 'text', 'title' => __( 'Taxonomy', 'wck' ), 'description' => __( '(The name of the taxonomy. Name must not contain capital letters or spaces.)', 'wck' ), 'required' => true ),			
-			array( 'type' => 'text', 'title' => __( 'Singular Label', 'wck' ), 'required' => true, 'description' => __( 'ex. Writer', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Plural Label', 'wck' ), 'required' => true, 'description' => __( 'ex. Writers', 'wck' ) ),
-			array( 'type' => 'checkbox', 'title' => __( 'Attach to', 'wck' ), 'options' => $post_type_names ),
-			array( 'type' => 'select', 'title' => __( 'Hierarchical', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Is this taxonomy hierarchical (have descendants) like categories or not hierarchical like tags.', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Taxonomy', 'wck' ), 'slug' => 'taxonomy', 'description' => __( '(The name of the taxonomy. Name must not contain capital letters or spaces.)', 'wck' ), 'required' => true ),
+			array( 'type' => 'text', 'title' => __( 'Singular Label', 'wck' ), 'slug' => 'singular-label', 'required' => true, 'description' => __( 'ex. Writer', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Plural Label', 'wck' ), 'slug' => 'plural-label', 'required' => true, 'description' => __( 'ex. Writers', 'wck' ) ),
+			array( 'type' => 'checkbox', 'title' => __( 'Attach to', 'wck' ), 'slug' => 'attach-to', 'options' => $post_type_names ),
+			array( 'type' => 'select', 'title' => __( 'Hierarchical', 'wck' ), 'slug' => 'hierarchical', 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Is this taxonomy hierarchical (have descendants) like categories or not hierarchical like tags.', 'wck' ) ),
 
-			array( 'type' => 'text', 'title' => __( 'Search Items', 'wck' ), 'description' => __( 'ex. Search Writers', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Popular Items', 'wck' ), 'description' => __( 'ex. Popular Writers', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'All Items', 'wck' ), 'description' => __( 'ex. All Writers', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Parent Item', 'wck' ), 'description' => __( 'ex. Parent Genre', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Parent Item Colon', 'wck' ), 'description' => __( 'ex. Parent Genre:', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Edit Item', 'wck' ), 'description' => __( 'ex. Edit Writer', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Update Item', 'wck' ), 'description' => __( 'ex. Update Writer', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Add New Item', 'wck' ), 'description' => __( 'ex. Add New Writer', 'wck' ) ),		
-			array( 'type' => 'text', 'title' => __( 'New Item Name', 'wck' ), 'description' => __( 'ex. New Writer Name', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Separate Items With Commas', 'wck' ), 'description' => __( 'ex. Separate writers with commas', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Add Or Remove Items', 'wck' ), 'description' => __( 'ex. Add or remove writers', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Choose From Most Used', 'wck' ), 'description' => __( 'ex. Choose from the most used writers', 'wck' ) ),
-			array( 'type' => 'text', 'title' => __( 'Menu Name', 'wck' ) ),	
+			array( 'type' => 'text', 'title' => __( 'Search Items', 'wck' ), 'slug' => 'search-items', 'description' => __( 'ex. Search Writers', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Popular Items', 'wck' ), 'slug' => 'popular-items', 'description' => __( 'ex. Popular Writers', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'All Items', 'wck' ), 'slug' => 'all-items', 'description' => __( 'ex. All Writers', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Parent Item', 'wck' ), 'slug' => 'parent-item', 'description' => __( 'ex. Parent Genre', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Parent Item Colon', 'wck' ), 'slug' => 'parent-item-colon', 'description' => __( 'ex. Parent Genre:', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Edit Item', 'wck' ), 'slug' => 'edit-item', 'description' => __( 'ex. Edit Writer', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Update Item', 'wck' ), 'slug' => 'update-item', 'description' => __( 'ex. Update Writer', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Add New Item', 'wck' ), 'slug' => 'add-new-item', 'description' => __( 'ex. Add New Writer', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'New Item Name', 'wck' ), 'slug' => 'new-item-name', 'description' => __( 'ex. New Writer Name', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Separate Items With Commas', 'wck' ), 'slug' => 'separate-items-with-commas', 'description' => __( 'ex. Separate writers with commas', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Add Or Remove Items', 'wck' ), 'slug' => 'add-or-remove-items', 'description' => __( 'ex. Add or remove writers', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Choose From Most Used', 'wck' ), 'slug' => 'choose-from-most-used', 'description' => __( 'ex. Choose from the most used writers', 'wck' ) ),
+			array( 'type' => 'text', 'title' => __( 'Menu Name', 'wck' ), 'slug' => 'menu-name' ),
 			
-			array( 'type' => 'select', 'title' => __( 'Public', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Meta argument used to define default values for publicly_queriable, show_ui, show_in_nav_menus and exclude_from_search', 'wck' ) ),
-			array( 'type' => 'select', 'title' => __( 'Show UI', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to generate a default UI for managing this post type.', 'wck' ) ),
-			array( 'type' => 'select', 'title' => __( 'Show Tagcloud', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to allow the Tag Cloud widget to use this taxonomy.', 'wck' ) ),
-			array( 'type' => 'select', 'title' => __( 'Show Admin Column', 'wck' ), 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether to allow automatic creation of taxonomy columns on associated post-types.', 'wck' ) )
+			array( 'type' => 'select', 'title' => __( 'Public', 'wck' ), 'slug' => 'public', 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Meta argument used to define default values for publicly_queriable, show_ui, show_in_nav_menus and exclude_from_search', 'wck' ) ),
+			array( 'type' => 'select', 'title' => __( 'Show UI', 'wck' ), 'slug' => 'show-ui', 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to generate a default UI for managing this post type.', 'wck' ) ),
+			array( 'type' => 'select', 'title' => __( 'Show Tagcloud', 'wck' ), 'slug' => 'show-tagcloud', 'options' => array( 'false', 'true' ), 'default' => 'true', 'description' => __( 'Whether to allow the Tag Cloud widget to use this taxonomy.', 'wck' ) ),
+			array( 'type' => 'select', 'title' => __( 'Show Admin Column', 'wck' ), 'slug' => 'show-admin-column', 'options' => array( 'false', 'true' ), 'default' => 'false', 'description' => __( 'Whether to allow automatic creation of taxonomy columns on associated post-types.', 'wck' ) )
 		);
 
 		$args = array(
@@ -74,7 +74,7 @@ function wck_ctc_create_box(){
 	}
 }
 
-add_action( 'init', 'wck_ctc_create_taxonomy' );
+add_action( 'init', 'wck_ctc_create_taxonomy', 8 );
 
 function wck_ctc_create_taxonomy(){
 	$cts = get_option('wck_ctc');
@@ -217,16 +217,22 @@ function wck_ctc_display_adv_wrapper_end( $form, $i ){
 }
 
 /* Add side metaboxes */
-add_action('add_meta_boxes', 'wck_ctc_add_side_boxes' );
-function wck_ctc_add_side_boxes(){
-	add_meta_box( 'wck-ctc-side', __( 'Wordpress Creation Kit', 'wck' ), 'wck_ctc_side_box_one', 'wck_page_ctc-page', 'side', 'high' );
-}
-function wck_ctc_side_box_one(){
-	?>
-		<a href="http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/?utm_source=wpbackend&utm_medium=clientsite&utm_campaign=WCKFree"><img src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>?v=1" width="260" height="385" alt="WCK-PRO"/></a>
-	<?php
-}
+if( !file_exists( dirname(__FILE__).'/wck-stp.php' ) ) {
+    add_action('add_meta_boxes', 'wck_ctc_add_side_boxes');
+    function wck_ctc_add_side_boxes()
+    {
+        add_meta_box('wck-ctc-side', __('Wordpress Creation Kit', 'wck'), 'wck_ctc_side_box_one', 'wck_page_ctc-page', 'side', 'high');
+    }
 
+    function wck_ctc_side_box_one()
+    {
+        ?>
+        <a href="http://www.cozmoslabs.com/wck-custom-fields-custom-post-types-plugin/?utm_source=wpbackend&utm_medium=clientsite&utm_campaign=WCKFree"><img
+                src="<?php echo plugins_url('/images/banner_pro.png', __FILE__) ?>?v=1" width="260" height="385"
+                alt="WCK-PRO"/></a>
+    <?php
+    }
+}
 /* Contextual Help */
 add_action('load-wck_page_ctc-page', 'wck_ctc_help');
 

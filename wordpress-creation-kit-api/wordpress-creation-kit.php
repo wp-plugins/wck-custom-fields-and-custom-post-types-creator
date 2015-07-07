@@ -745,7 +745,7 @@ class Wordpress_Creation_Kit{
 			$values = array();
 		
 		$values = apply_filters( "wck_add_meta_filter_values_{$meta}", $values );
-		
+
 		/* check required fields */
 		$errors = self::wck_test_required( $this->args['meta_array'], $meta, $values, $id );		
 		if( $errors != '' ){
