@@ -939,10 +939,10 @@ function wck_fep_output_user_profile(){
 	$user_profile .= '<input type="text" id="email" name="email" value="'. esc_attr( $current_user->user_email ) .'" /></li>';
 	
 	$user_profile .= '<li><label for="password">'. __( 'Password:', 'wck' ) .'</label>';
-	$user_profile .= '<input type="text" id="password" name="password"/></li>';
+	$user_profile .= '<input type="password" id="password" name="password"/></li>';
 	
 	$user_profile .= '<li><label for="confirm-password">'. __( 'Password Confirm:', 'wck' ) .'</label>';
-	$user_profile .= '<input type="text" id="confirm-password" name="confirm-password"/></li>';
+	$user_profile .= '<input type="password" id="confirm-password" name="confirm-password"/></li>';
 	
 	$user_profile .= '<li><label for="description">'. __( 'Description', 'wck' ) .'</label>';
 	$user_profile .= '<textarea id="description" name="description">'. esc_textarea( $user_data->user_description ) .'</textarea></li>';
@@ -1026,6 +1026,7 @@ function wck_fep_handle_user_action(){
 						'user_email' => $email,
 						'user_pass' => $password						
 					);
+            $user = wp_insert_user( $userdata );
 		}
 		else if( $action == 'update' ){
 			$current_user = wp_get_current_user();
@@ -1037,9 +1038,11 @@ function wck_fep_handle_user_action(){
 					);
 			if( !empty( $password ) )
 				$userdata['user_pass'] = $password;
+
+            $user = wp_update_user( $userdata );
 		}
 				
-		$user = wp_insert_user( $userdata );
+
 	}
 	
 	if( is_wp_error( $user ) ){
